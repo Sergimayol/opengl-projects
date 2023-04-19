@@ -1,3 +1,8 @@
+#include <GL/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <math.h>
+
 // Using Catpuccin Frappé
 #define BG_COLOR 0.18823529412f, 0.20392156863f, 0.27450980392f, 0.0f
 #define BLUE 0.54901960784f, 0.66666666667f, 0.93333333333f, 0.0f
