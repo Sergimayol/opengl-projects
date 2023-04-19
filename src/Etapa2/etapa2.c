@@ -1,8 +1,7 @@
 #include <GL/glut.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-
-#define BG_COLOR 0.0f, 0.0f, 0.0f, 0.0f // NEGRO
+#include "../templates/base.h"
 
 const int W_WIDTH = 600; // Tama�o incial de la ventana
 const int W_HEIGHT = 600;
@@ -24,7 +23,7 @@ void display(void)
     // ---- CUADRANTE ARRIBA - IZQ -------
     glTranslatef(0.2f, 0.2f, 0.2f); // Translación
     glBegin(GL_QUADS);
-    glColor3f(1.0f, 1.0f, 1.0f);                   // blanco
+    glColor4f(LIGHT);                              // blanco
     glVertex2f(-0.75f * TAM_ESC, 0.25f * TAM_ESC); // arriba-izquierda
     glVertex2f(-0.75f * TAM_ESC, 0.75f * TAM_ESC); // abajo-izquierda
     glVertex2f(-0.25f * TAM_ESC, 0.75f * TAM_ESC); // abajo-derecha
@@ -35,7 +34,7 @@ void display(void)
     // ---- CUADRANTE ABAJO - IZQ -------
     glRotatef(45.0f, -0.5f, -0.5f, 0.0f); // Rotación
     glBegin(GL_QUADS);
-    glColor3f(1.0f, 1.0f, 1.0f);                    // blanco
+    glColor4f(LIGHT);                               // blanco
     glVertex2f(-0.75f * TAM_ESC, -0.25f * TAM_ESC); // arriba-izquierda
     glVertex2f(-0.75f * TAM_ESC, -0.75f * TAM_ESC); // abajo-izquierda
     glVertex2f(-0.25f * TAM_ESC, -0.75f * TAM_ESC); // abajo-derecha
@@ -46,7 +45,7 @@ void display(void)
     // ---- CUADRANTE ABAJO - DER-------
     glScalef(1.5f, 1.5f, 0.0f); // Escalado
     glBegin(GL_QUADS);
-    glColor3f(1.0f, 1.0f, 1.0f);                   // blanco
+    glColor4f(LIGHT);                              // blanco
     glVertex2f(0.75f * TAM_ESC, -0.25f * TAM_ESC); // arriba-izquierda
     glVertex2f(0.75f * TAM_ESC, -0.75f * TAM_ESC); // abajo-izquierda
     glVertex2f(0.25f * TAM_ESC, -0.75f * TAM_ESC); // abajo-derecha
@@ -62,7 +61,7 @@ void display(void)
         0.0f, 0.0f, 0.0f, 1.0f};
     glMultMatrixf(m);
     glBegin(GL_QUADS);
-    glColor3f(1.0f, 1.0f, 1.0f);                  // blanco
+    glColor4f(LIGHT);                             // blanco
     glVertex2f(0.75f * TAM_ESC, 0.25f * TAM_ESC); // arriba-izquierda
     glVertex2f(0.75f * TAM_ESC, 0.75f * TAM_ESC); // abajo-izquierda
     glVertex2f(0.25f * TAM_ESC, 0.75f * TAM_ESC); // abajo-derecha
@@ -71,7 +70,7 @@ void display(void)
     glLoadIdentity();
 
     // Ejes
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glColor4f(PURE_WHITE);
     // Eje x
     glBegin(GL_LINES);
     glVertex2f(1.0f, 0.0f);
@@ -146,7 +145,6 @@ int main(int argc, char **argv)
 
     // El color de fondo ser� el negro (RGBA, RGB + Alpha channel)
     glClearColor(BG_COLOR);
-    glOrtho(-1.0, 1.0f, -1.0, 1.0f, -1.0, 1.0f);
 
     // Comienza la ejecuci�n del core de GLUT
     glutMainLoop();

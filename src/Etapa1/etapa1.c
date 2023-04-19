@@ -1,6 +1,7 @@
 #include <GL/glut.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include "../templates/base.h"
 
 const int W_WIDTH = 500; // Tama�o incial de la ventana
 const int W_HEIGHT = 500;
@@ -41,44 +42,35 @@ void display(void)
     glRotatef(fAngulo, 0.0f, 0.0f, 1.0f);
     // Creamos a continuaci�n dibujamos los tres poligonos
     glBegin(GL_POLYGON);
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glColor4f(LIGHT);
     glVertex3f(0.0f, 0.0f, 0.0f);
-    glColor3f(0.0f, 1.0f, 0.0f);
+    glColor4f(RED);
     glVertex3f(1.0f, 0.0f, 0.0f);
-    glColor3f(0.0f, 1.0f, 0.0f);
+    glColor4f(GREEN);
     glVertex3f(-0.5f, 0.866f, 0.0f);
     glEnd();
 
     glBegin(GL_POLYGON);
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glColor4f(LIGHT);
     glVertex3f(0.0f, 0.0f, 0.0f);
-    glColor3f(1.0f, 0.0f, 0.0f);
+    glColor4f(RED);
     glVertex3f(1.0f, 0.0f, 0.0f);
-    glColor3f(0.0f, 0.0f, 1.0f);
+    glColor4f(BLUE);
     glVertex3f(-0.5f, -0.866f, 0.0f);
     glEnd();
 
     glBegin(GL_POLYGON);
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glColor4f(LIGHT);
     glVertex3f(0.0f, 0.0f, 0.0f);
-    glColor3f(0.0f, 1.0f, 1.0f);
+    glColor4f(GREEN);
     glVertex3f(-0.5f, 0.866f, 0.0f);
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex3f(-0.5f, -0.866f, 0.0f);
-    glEnd();
-
-    glBegin(GL_POLYGON);
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glVertex3f(0.0f, 0.0f, 0.0f);
-    glColor3f(0.0f, 1.0f, 1.0f);
-    glVertex3f(-0.5f, 0.866f, 0.0f);
-    glColor3f(0.0f, 0.0f, 1.0f);
+    glColor4f(BLUE);
     glVertex3f(-0.5f, -0.866f, 0.0f);
     glEnd();
 
     // Cuadrado
     glBegin(GL_POLYGON);
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glColor4f(DARK);
     glVertex2f(-SQR_SIZE, SQR_SIZE);
     glVertex2f(SQR_SIZE, SQR_SIZE);
     glVertex2f(SQR_SIZE, -SQR_SIZE);
@@ -122,8 +114,7 @@ int main(int argc, char **argv)
     glutReshapeFunc(reshape);
 
     // El color de fondo ser� el negro (RGBA, RGB + Alpha channel)
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glOrtho(-1.0, 1.0f, -1.0, 1.0f, -1.0, 1.0f);
+    glClearColor(BG_COLOR);
 
     // Comienza la ejecuci�n del core de GLUT
     glutMainLoop();

@@ -8,20 +8,23 @@
 
 void compile_programs()
 {
-    // CMD(COMPILER, "-o", BUILD_PATH("etapa1"), "./src/Etapa1/etapa1.c", CFLAGS);
+    CMD(COMPILER, "-o", BUILD_PATH("etapa1"), "./src/Etapa1/etapa1.c", CFLAGS);
     CMD(COMPILER, "-o", BUILD_PATH("etapa2"), "./src/Etapa2/etapa2.c", CFLAGS);
+    CMD(COMPILER, "-o", BUILD_PATH("base"), "./src/templates/base.c", CFLAGS);
 }
 
 void clean_output_exes()
 {
     CMD("rm", "-f", BUILD_PATH("etapa1"));
     CMD("rm", "-f", BUILD_PATH("etapa2"));
+    CMD("rm", "-f", BUILD_PATH("base"));
 }
 
 void run_programs()
 {
-    // CMD(BUILD_PATH("etapa1"));
+    CMD(BUILD_PATH("etapa1"));
     CMD(BUILD_PATH("etapa2"));
+    CMD(BUILD_PATH("base"));
 }
 
 int main(int argc, char **argv)
