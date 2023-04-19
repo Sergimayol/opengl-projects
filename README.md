@@ -43,12 +43,12 @@ El repositorio está organizado de la siguiente manera:
 
 ## Etapa 1: Generación del Workspace y primer programa en Opengl mediante GLUT
 
-<p align="center"> <img width="30%" src=".github/img/Etapa1.png"> </p>
+<p align="center"> <img width="30%" src=".github/img/Etapa1.PNG"> </p>
 
 ## Etapa 2: Doble buffer y escalado
 
 ### Ejemplos de transformaciones
 
-<p align="center"> <img width="30%" src=".github/img/Etapa2_1.png"> </p>
+<p align="center"> <img width="30%" src=".github/img/Etapa2_1.PNG"> </p>
 
 ### Doble pendulo
