@@ -4,7 +4,31 @@
 
 const int W_WIDTH = 500; // Tama�o incial de la ventana
 const int W_HEIGHT = 500;
+const float SQR_SIZE = 0.2f;
 GLfloat fAngulo; // Variable que indica el �ngulo de rotaci�n de los ejes.
+
+// Función que controla la proporción al cambiar el tamaño
+void reshape(int width, int height)
+{
+    const float ar_origin = (float)W_WIDTH / (float)W_HEIGHT;
+    const float ar_new = (float)width / (float)height;
+
+    float scale_w = (float)width / (float)W_WIDTH;
+    float scale_h = (float)height / (float)W_HEIGHT;
+    if (ar_new > ar_origin)
+    {
+        scale_w = scale_h;
+    }
+    else
+    {
+        scale_h = scale_w;
+    }
+
+    float margin_x = (width - W_WIDTH * scale_w) / 2;
+    float margin_y = (height - W_HEIGHT * scale_h) / 2;
+
+    glViewport(margin_x, margin_y, W_WIDTH * scale_w, W_HEIGHT * scale_h);
+}
 
 // Funci�n que visualiza la escena OpenGL
 void display(void)
@@ -42,6 +66,25 @@ void display(void)
     glColor3f(0.0f, 0.0f, 1.0f);
     glVertex3f(-0.5f, -0.866f, 0.0f);
     glEnd();
+
+    glBegin(GL_POLYGON);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glVertex3f(0.0f, 0.0f, 0.0f);
+    glColor3f(0.0f, 1.0f, 1.0f);
+    glVertex3f(-0.5f, 0.866f, 0.0f);
+    glColor3f(0.0f, 0.0f, 1.0f);
+    glVertex3f(-0.5f, -0.866f, 0.0f);
+    glEnd();
+
+    // Cuadrado
+    glBegin(GL_POLYGON);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glVertex2f(-SQR_SIZE, SQR_SIZE);
+    glVertex2f(SQR_SIZE, SQR_SIZE);
+    glVertex2f(SQR_SIZE, -SQR_SIZE);
+    glVertex2f(-SQR_SIZE, -SQR_SIZE);
+    glEnd();
+
     glPopMatrix();
 
     glFlush();
@@ -76,9 +119,10 @@ int main(int argc, char **argv)
     // Indicamos cuales son las funciones de redibujado e idle
     glutDisplayFunc(display);
     glutIdleFunc(idle);
+    glutReshapeFunc(reshape);
 
     // El color de fondo ser� el negro (RGBA, RGB + Alpha channel)
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glOrtho(-1.0, 1.0f, -1.0, 1.0f, -1.0, 1.0f);
 
     // Comienza la ejecuci�n del core de GLUT
