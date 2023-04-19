@@ -8,8 +8,8 @@
 
 void compile_programs()
 {
-    CMD(COMPILER, "-o", BUILD_PATH("etapa1"), "./src/etapa1.c", CFLAGS);
-    CMD(COMPILER, "-o", BUILD_PATH("etapa2"), "./src/etapa2.c", CFLAGS);
+    // CMD(COMPILER, "-o", BUILD_PATH("etapa1"), "./src/Etapa1/etapa1.c", CFLAGS);
+    CMD(COMPILER, "-o", BUILD_PATH("etapa2"), "./src/Etapa2/etapa2.c", CFLAGS);
 }
 
 void clean_output_exes()
@@ -20,7 +20,7 @@ void clean_output_exes()
 
 void run_programs()
 {
-    CMD(BUILD_PATH("etapa1"));
+    // CMD(BUILD_PATH("etapa1"));
     CMD(BUILD_PATH("etapa2"));
 }
 
@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     GO_REBUILD_URSELF(argc, argv);
     MKDIRS(BUILD_DIR);
     compile_programs();
-    //    run_programs();
+    run_programs();
     //    clean_output_exes();
     return 0;
 }
