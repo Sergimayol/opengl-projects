@@ -10,10 +10,10 @@ Las practicas de la asignatura de informática gráfica consisten en la realizac
 
 ## Índice
 
-- [Desarrollo](#desarrollo)
+- [Desarrollo](#desarollo)
 - [Estructura del repositorio](#estructura-del-repositorio)
-- [Etapa 1](#etapa-1)
-- [Etapa 2](#etapa-2)
+- [Etapa 1](#etapa-1-generación-del-workspace-y-primer-programa-en-opengl-mediante-glut)
+- [Etapa 2](#etapa-2-doble-buffer-y-escalado)
 
 ## Desarollo
 
