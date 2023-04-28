@@ -10,10 +10,14 @@ Las practicas de la asignatura de informática gráfica consisten en la realizac
 
 ## Índice
 
-- [Desarrollo](#desarollo)
-- [Estructura del repositorio](#estructura-del-repositorio)
-- [Etapa 1](#etapa-1-generación-del-workspace-y-primer-programa-en-opengl-mediante-glut)
-- [Etapa 2](#etapa-2-doble-buffer-y-escalado)
+-   [Proyectos OpenGL](#proyectos-opengl)
+    -   [Índice](#índice)
+    -   [Desarollo](#desarollo)
+    -   [Estructura del repositorio](#estructura-del-repositorio)
+    -   [Etapa 1: Generación del Workspace y primer programa en Opengl mediante GLUT](#etapa-1-generación-del-workspace-y-primer-programa-en-opengl-mediante-glut)
+    -   [Etapa 2: Doble buffer y escalado](#etapa-2-doble-buffer-y-escalado)
+        -   [Ejemplos de transformaciones](#ejemplos-de-transformaciones)
+        -   [Doble pendulo](#doble-pendulo)
 
 ## Desarollo
 
@@ -52,3 +56,5 @@ El repositorio está organizado de la siguiente manera:
 <p align="center"> <img width="30%" src=".github/img/Etapa2_1.PNG"> </p>
 
 ### Doble pendulo
+
+<p align="center"> <img width="30%" src=".github/img/pendulo-doble.png"> </p>
