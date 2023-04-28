@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
 
     // Creamos la nueva ventana
-    glutCreateWindow("Etapa 2.1");
+    glutCreateWindow("Etapa 2 - Pendulo");
 
     // Indicamos cuales son las funciones de redibujado e idle
     glutDisplayFunc(display);
