@@ -1,40 +1,72 @@
-#include "../templates/base.h"
+#include "etapa4.h"
 
-const int W_WIDTH = 600; // Tamaño incial de la ventana
+const int W_WIDTH = 600;
 const int W_HEIGHT = 600;
+const float ESCALADO_FIG = 1.5f;
+bool displayPlane = false;
+bool displayAxis = true;
+unsigned char fig = '1';
 
 void display()
 {
-    // Scene code here
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 
+    gluLookAt(2.0, 2.0, 2.0,  // Eye position
+              0.0, 0.0, 0.0,  // Look-at position
+              0.0, 1.0, 0.0); // Up vector
+
+    if (displayPlane)
+    {
+        drawPlanes(ESCALADO_FIG);
+    }
+
+    if (displayAxis)
+    {
+        draw3DAXis(ESCALADO_FIG + 0.2f);
+    }
     glutSwapBuffers();
 }
 
 void idle()
 {
+    // Indicamos que es necesario repintar la pantalla
+    glutPostRedisplay();
 }
 
-void reshape(GLsizei width, GLsizei height)
+void manageKeyBoardInput(unsigned char key, int x, int y)
 {
-    // Calcular el aspect ratio de la nueva ventana
-    if (height == 0)
+    // Avoid unused warning
+    x = x;
+    y = y;
+
+    switch (key)
     {
-        height = 1; // Para evitar dividir por cero
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+        fig = key;
+        break;
+    case 27: // 'ESC'
+        displayAxis = !displayAxis;
+        break;
+    case 'p':
+        displayPlane = !displayPlane;
+        break;
+    default:
+        break;
     }
-    GLfloat aspect = (GLfloat)width / (GLfloat)height;
-    // Hacer que el viewport cubra la nueva ventana
+}
+
+void reshapeFrustum(GLsizei width, GLsizei height)
+{
     glViewport(0, 0, width, height);
-    // Hacer que el aspect ratio del área de dibujado sea igual al del viewport
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    if (width >= height)
-    {
-        glOrtho(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0, -1.0, 1.0);
-    }
-    else
-    {
-        glOrtho(-1.0, 1.0, -1.0 / aspect, 1.0 / aspect, -1.0, 1.0);
-    }
+    glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -46,19 +78,20 @@ int main(int argc, char **argv)
     // Indicamos como ha de ser la nueva ventana
     glutInitWindowPosition(100, 100);
     glutInitWindowSize(W_WIDTH, W_HEIGHT);
-    glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
     // Creamos la nueva ventana
     glutCreateWindow("Etapa 4");
+    glEnable(GL_LINE_SMOOTH | GL_DEPTH_TEST);
 
     // Indicamos cuales son las funciones de redibujado e idle
     glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
+    glutReshapeFunc(reshapeFrustum);
+    glutKeyboardFunc(manageKeyBoardInput);
     glutIdleFunc(idle);
 
     glClearColor(BG_COLOR);
     glClear(GL_COLOR_BUFFER_BIT);
-    glOrtho(-1.0, 1.0f, -1.0, 1.0f, -1.0, 1.0f);
 
     // Comienza la ejecución del core de GLUT
     glutMainLoop();
