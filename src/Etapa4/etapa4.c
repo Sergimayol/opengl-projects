@@ -58,6 +58,7 @@ int main(int argc, char **argv)
 
     glClearColor(BG_COLOR);
     glClear(GL_COLOR_BUFFER_BIT);
+    glOrtho(-1.0, 1.0f, -1.0, 1.0f, -1.0, 1.0f);
 
     // Comienza la ejecución del core de GLUT
     glutMainLoop();

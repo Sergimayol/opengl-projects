@@ -142,6 +142,7 @@ int main(int argc, char **argv)
 
 	// El color de fondo será el negro (RGBA, RGB + Alpha channel)
 	glClearColor(BG_COLOR);
+	glOrtho(-1.0, 1.0f, -1.0, 1.0f, -1.0, 1.0f);
 
 	// Comienza la ejecución del core de GLUT
 	glutMainLoop();
