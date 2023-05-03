@@ -2,7 +2,8 @@
 
 const int W_WIDTH = 600; // Tamaño incial de la ventana
 const int W_HEIGHT = 600;
-GLfloat fAngulo; // Variable que indica el ángulo de rotación de los ejes.
+GLfloat fAnguloInt; // Variable que indica el ángulo de rotación de los ejes.
+GLfloat fAnguloExt; // Variable que indica el ángulo de rotación de los ejes.
 
 // Función que visualiza la escena OpenGL
 void display(void)
@@ -16,22 +17,24 @@ void display(void)
     const float ESCALADO = 0.5f;
     glPushMatrix();
     // Pendulo 1
-    glRotatef(fAngulo, 0.0f, 0.0f, 1.0f);
+    glRotatef(fAnguloInt, 0.0f, 0.0f, 1.0f);
     glColor4f(GREEN);
     glBegin(GL_LINES);
     glVertex2f(0.0f, 0.0f);
     glVertex2f(1.0f * ESCALADO, 0.5f);
     glEnd();
 
+    glPushMatrix();
     // Pendulo 2
     glTranslatef(1.0f * ESCALADO, 0.5f, 0.0f);
-    glRotatef(fAngulo, 0.0f, 0.0f, 1.0f);
+    glRotatef(fAnguloExt, 0.0f, 0.0f, 1.0f);
     glTranslatef(-1.0f * ESCALADO, -0.5f, 0.0f);
     glColor4f(GREEN);
     glBegin(GL_LINES);
     glVertex2f(1.0f * ESCALADO, 0.5f);
     glVertex2f(1.0f, 0.0f);
     glEnd();
+    glPopMatrix();
     glPopMatrix();
 
     // ------ Ejes X - Y ------
@@ -59,10 +62,15 @@ void display(void)
 void idle(void)
 {
     // Incrementamos el ángulo
-    fAngulo += 0.1f;
+    fAnguloInt += 0.1f;
+    fAnguloExt += 0.3f;
     // Si es mayor que dos pi la decrementamos
-    if (fAngulo > 360)
-        fAngulo -= 360;
+    if (fAnguloInt > 360)
+        fAnguloInt -= 360;
+
+    if (fAnguloExt > 360)
+        fAnguloExt -= 360;
+
     // Indicamos que es necesario repintar la pantalla
     glutPostRedisplay();
 }

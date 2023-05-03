@@ -8,6 +8,63 @@ GLfloat fAngulo;
 unsigned char fig = 'c';
 bool displayAxis = true;
 bool displayWithWire = true;
+bool displayPlane = false;
+
+void drawTeaPot()
+{
+    glPushMatrix();
+    glLoadIdentity();
+    glRotatef(45.0f, 1.0f, 0.0f, 0.0f);   // Rotate the object around the x-axis
+    glRotatef(30.0f, 0.0f, 1.0f, 0.0f);   // Rotate the object around the y-axis
+    glRotatef(fAngulo, 0.0f, 0.0f, 1.0f); // rotate the cube
+
+    // enable depth testing
+    glEnable(GL_DEPTH_TEST);
+
+    // set the color of the cube
+    glColor3f(1.0f, 0.0f, 0.0f); // red
+
+    const GLdouble size = 1 * ESCALADO_FIG;
+
+    if (displayWithWire)
+    {
+        glutWireTeapot(size);
+    }
+    else
+    {
+        glutSolidTeapot(size);
+    }
+
+    glEnd();
+    glPopMatrix();
+}
+
+void drawTetreaHedron()
+{
+    glPushMatrix();
+    glLoadIdentity();
+    glRotatef(45.0f, 1.0f, 0.0f, 0.0f);   // Rotate the object around the x-axis
+    glRotatef(30.0f, 0.0f, 1.0f, 0.0f);   // Rotate the object around the y-axis
+    glRotatef(fAngulo, 0.0f, 0.0f, 1.0f); // rotate the cube
+
+    // enable depth testing
+    glEnable(GL_DEPTH_TEST);
+
+    // set the color of the cube
+    glColor3f(1.0f, 0.0f, 0.0f); // red
+
+    if (displayWithWire)
+    {
+        glutWireTetrahedron();
+    }
+    else
+    {
+        glutSolidTetrahedron();
+    }
+
+    glEnd();
+    glPopMatrix();
+}
 
 void drawDonut()
 {
@@ -117,11 +174,45 @@ void draw3DAXis()
     glPopMatrix();
 }
 
+void drawPlanes()
+{
+    glPushMatrix();
+    glLoadIdentity();
+    glBegin(GL_QUADS);
+    // X - Y
+    glColor4f(YELLOW);
+    glVertex3f(-1.0f, 1.0f, 0.0f);  // arriba-izquierda
+    glVertex3f(-1.0f, -1.0f, 0.0f); // abajo-izquierda
+    glVertex3f(1.0f, -1.0f, 0.0f);  // abajo-derecha
+    glVertex3f(1.0f, 1.0f, 0.0f);   // arriba-derecha
+    glEnd();
+
+    // X - Z
+    glBegin(GL_QUADS);
+    glColor4f(GREEN);
+    glVertex3f(-1.0f, 0.0f, -1.0f); // arriba-izquierda
+    glVertex3f(-1.0f, 0.0f, 1.0f);  // abajo-izquierda
+    glVertex3f(1.0f, 0.0f, -1.0f);  // abajo-derecha
+    glVertex3f(1.0f, 0.0f, 1.0f);   // arriba-derecha
+    glEnd();
+
+    // Y - Z
+    glBegin(GL_QUADS);
+    glColor4f(BLUE);
+    glVertex3f(0.0f, -1.0f, -1.0f); // arriba-izquierda
+    glVertex3f(0.0f, -1.0f, 1.0f);  // abajo-izquierda
+    glVertex3f(0.0f, 1.0f, -1.0f);  // abajo-derecha
+    glVertex3f(0.0f, 1.0f, 1.0f);   // arriba-derecha
+    glEnd();
+    glPopMatrix();
+}
+
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_LINE_SMOOTH | GL_DEPTH);
+    glEnable(GL_LINE_SMOOTH | GL_DEPTH_TEST);
     glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 
     switch (fig)
     {
@@ -134,9 +225,20 @@ void display()
     case 'd':
         drawDonut();
         break;
+    case 'k':
+        drawTetreaHedron();
+        break;
+    case 'p':
+        drawTeaPot();
+        break;
     default:
         break;
     }
+    if (displayPlane)
+    {
+        drawPlanes();
+    }
+
     if (displayAxis)
     {
         draw3DAXis();
@@ -156,6 +258,8 @@ void manageKeyBoardInput(unsigned char key, int x, int y)
     case 'c':
     case 't':
     case 'd':
+    case 'k':
+    case 'p':
         fig = key;
         break;
     case 'w':
@@ -163,6 +267,9 @@ void manageKeyBoardInput(unsigned char key, int x, int y)
         break;
     case 27: // 'ESC'
         displayAxis = !displayAxis;
+        break;
+    case 'm':
+        displayPlane = !displayPlane;
         break;
     default:
         break;
@@ -205,6 +312,16 @@ void reshape(GLsizei width, GLsizei height)
     glMatrixMode(GL_MODELVIEW);
 }
 
+void reshapeFrustum(GLsizei width, GLsizei height)
+{
+    glViewport(0, 0, (GLfloat)width, (GLfloat)height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 20.0);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
+
 int main(int argc, char **argv)
 {
     // Inicializamos la librería GLUT
@@ -213,7 +330,7 @@ int main(int argc, char **argv)
     // Indicamos como ha de ser la nueva ventana
     glutInitWindowPosition(100, 100);
     glutInitWindowSize(W_WIDTH, W_HEIGHT);
-    glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE | GLUT_DEPTH);
 
     // Creamos la nueva ventana
     glutCreateWindow("Etapa 3");
@@ -221,6 +338,7 @@ int main(int argc, char **argv)
     // Indicamos cuales son las funciones de redibujado e idle
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+    // glutReshapeFunc(reshapeFrustum);
     glutKeyboardFunc(manageKeyBoardInput);
     glutIdleFunc(idle);
 
