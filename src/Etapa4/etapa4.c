@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
 
     // Creamos la nueva ventana
-    glutCreateWindow("CHANGE ME");
+    glutCreateWindow("Etapa 4");
 
     // Indicamos cuales son las funciones de redibujado e idle
     glutDisplayFunc(display);

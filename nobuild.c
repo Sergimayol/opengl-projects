@@ -12,6 +12,7 @@ void compile_programs()
 	CMD(COMPILER, "-o", BUILD_PATH("etapa2"), "./src/Etapa2/etapa2.c", CFLAGS);
 	CMD(COMPILER, "-o", BUILD_PATH("pendulo"), "./src/Etapa2/pendulo.c", CFLAGS);
 	CMD(COMPILER, "-o", BUILD_PATH("etapa3"), "./src/Etapa3/etapa3.c", CFLAGS);
+	CMD(COMPILER, "-o", BUILD_PATH("etapa4"), "./src/Etapa4/etapa4.c", CFLAGS);
 	CMD(COMPILER, "-o", BUILD_PATH("base"), "./src/templates/base.c", CFLAGS);
 }
 
@@ -20,6 +21,8 @@ void clean_output_exes()
 	CMD("rm", "-f", BUILD_PATH("etapa1"));
 	CMD("rm", "-f", BUILD_PATH("etapa2"));
 	CMD("rm", "-f", BUILD_PATH("pendulo"));
+	CMD("rm", "-f", BUILD_PATH("etapa3"));
+	CMD("rm", "-f", BUILD_PATH("etapa4"));
 	CMD("rm", "-f", BUILD_PATH("base"));
 }
 
@@ -28,6 +31,8 @@ void run_programs()
 	CMD(BUILD_PATH("etapa1"));
 	CMD(BUILD_PATH("etapa2"));
 	CMD(BUILD_PATH("pendulo"));
+	CMD(BUILD_PATH("etapa3"));
+	CMD(BUILD_PATH("etapa4"));
 	CMD(BUILD_PATH("base"));
 }
 
