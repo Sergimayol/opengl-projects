@@ -18,6 +18,7 @@ Las practicas de la asignatura de informática gráfica consisten en la realizac
     -   [Etapa 2: Doble buffer y escalado](#etapa-2-doble-buffer-y-escalado)
         -   [Ejemplos de transformaciones](#ejemplos-de-transformaciones)
         -   [Doble pendulo](#doble-pendulo)
+-   [Etapa 3: Escena 3D](#etapa-3-escena-3d)
 
 ## Desarollo
 
@@ -58,3 +59,7 @@ El repositorio está organizado de la siguiente manera:
 ### Doble pendulo
 
 <p align="center"> <img width="30%" src=".github/img/pendulo-doble.png"> </p>
+
+# Etapa 3: Escena 3D
+
+<p align="center"> <img width="30%" src=".github/img/Etapa3.png"> </p>
