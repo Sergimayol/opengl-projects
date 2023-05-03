@@ -1,14 +1,77 @@
 #include "../templates/base.h"
+#include <stdbool.h>
 
 const int W_WIDTH = 600; // Tamaño incial de la ventana
 const int W_HEIGHT = 600;
+const float ESCALADO_FIG = 0.5f;
 GLfloat fAngulo;
+unsigned char fig = 'c';
+bool displayAxis = true;
+bool displayWithWire = true;
+
+void drawDonut()
+{
+    glPushMatrix();
+    glLoadIdentity();
+    glRotatef(45.0f, 1.0f, 0.0f, 0.0f);   // Rotate the object around the x-axis
+    glRotatef(30.0f, 0.0f, 1.0f, 0.0f);   // Rotate the object around the y-axis
+    glRotatef(fAngulo, 0.0f, 0.0f, 1.0f); // rotate the cube
+
+    // enable depth testing
+    glEnable(GL_DEPTH_TEST);
+
+    // set the color of the cube
+    glColor3f(1.0f, 0.0f, 0.0f); // red
+
+    const int NUM_OF_SLICES = 20;
+    if (displayWithWire)
+    {
+        glutWireTorus(1.0 * ESCALADO_FIG, 1.0 * ESCALADO_FIG, NUM_OF_SLICES, NUM_OF_SLICES); // Render a cone with base radius 1.0 and height 2.0
+    }
+    else
+    {
+        glutSolidTorus(1.0 * ESCALADO_FIG, 1.0 * ESCALADO_FIG, NUM_OF_SLICES, NUM_OF_SLICES); // Render a cone with base radius 1.0 and height 2.0
+    }
+
+    glEnd();
+    glPopMatrix();
+}
+
+void drawTriangle()
+{
+    glPushMatrix();
+    glLoadIdentity();
+    glRotatef(45.0f, 1.0f, 0.0f, 0.0f);   // Rotate the object around the x-axis
+    glRotatef(30.0f, 0.0f, 1.0f, 0.0f);   // Rotate the object around the y-axis
+    glRotatef(fAngulo, 0.0f, 0.0f, 1.0f); // rotate the cube
+
+    // enable depth testing
+    glEnable(GL_DEPTH_TEST);
+
+    // set the color of the cube
+    glColor3f(1.0f, 0.0f, 0.0f); // red
+
+    const int NUM_OF_SLICES = 20;
+    if (displayWithWire)
+    {
+        glutWireCone(1.0 * ESCALADO_FIG, 1.0 * ESCALADO_FIG, NUM_OF_SLICES, NUM_OF_SLICES); // Render a cone with base radius 1.0 and height 2.0
+    }
+    else
+    {
+        glutSolidCone(1.0 * ESCALADO_FIG, 1.0 * ESCALADO_FIG, NUM_OF_SLICES, NUM_OF_SLICES); // Render a cone with base radius 1.0 and height 2.0
+    }
+
+    glEnd();
+    glPopMatrix();
+}
 
 void drawCube()
 {
     glPushMatrix();
     glLoadIdentity();
-    glRotatef(fAngulo, 1.5f, 1.5f, 0.5f); // rotate the cube
+    glRotatef(45.0f, 1.0f, 0.0f, 0.0f);   // Rotate the object around the x-axis
+    glRotatef(-30.0f, 0.0f, 1.0f, 0.0f);  // Rotate the object around the y-axis
+    glRotatef(fAngulo, 0.0f, 0.0f, 1.0f); // rotate the cube
 
     // enable depth testing
     glEnable(GL_DEPTH_TEST);
@@ -17,7 +80,14 @@ void drawCube()
     glColor3f(1.0f, 0.0f, 0.0f); // red
 
     // draw the cube
-    glutSolidCube(1.0f * 0.5f); // specify the size of the cube
+    if (displayWithWire)
+    {
+        glutWireCube(1.0f * ESCALADO_FIG); // specify the size of the cube
+    }
+    else
+    {
+        glutSolidCube(1.0f * ESCALADO_FIG); // specify the size of the cube
+    }
     glEnd();
     glPopMatrix();
 }
@@ -53,17 +123,57 @@ void display()
     glEnable(GL_LINE_SMOOTH | GL_DEPTH);
     glMatrixMode(GL_MODELVIEW);
 
-    drawCube();
-    draw3DAXis();
+    switch (fig)
+    {
+    case 'c':
+        drawCube();
+        break;
+    case 't':
+        drawTriangle();
+        break;
+    case 'd':
+        drawDonut();
+        break;
+    default:
+        break;
+    }
+    if (displayAxis)
+    {
+        draw3DAXis();
+    }
 
     glutSwapBuffers();
+}
+
+void manageKeyBoardInput(unsigned char key, int x, int y)
+{
+    // Avoid unused warning
+    x = x;
+    y = y;
+
+    switch (key)
+    {
+    case 'c':
+    case 't':
+    case 'd':
+        fig = key;
+        break;
+    case 'w':
+        displayWithWire = !displayWithWire;
+        break;
+    case 27: // 'ESC'
+        displayAxis = !displayAxis;
+        break;
+    default:
+        break;
+    }
 }
 
 // Función que se ejecuta cuando el sistema no esta ocupado
 void idle(void)
 {
     // Incrementamos el ángulo
-    fAngulo += 0.3f;
+    fAngulo += 0.1f;
     // Si es mayor que dos pi la decrementamos
     if (fAngulo > 360)
         fAngulo -= 360;
@@ -111,6 +221,7 @@ int main(int argc, char **argv)
     // Indicamos cuales son las funciones de redibujado e idle
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+    glutKeyboardFunc(manageKeyBoardInput);
     glutIdleFunc(idle);
 
     glClearColor(BG_COLOR);
