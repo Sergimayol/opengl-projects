@@ -6,9 +6,24 @@ const float ESCALADO_FIG = 1.5f;
 bool displayPlane = false;
 bool displayAxis = true;
 unsigned char fig = '1';
+// Rotation camera angle
+float cameraAngle = 0.0f;
+// Rotation camera radius
+float cameraRadius = 5.0f;
+// Rotation camera height
+float cameraHeight = 2.0f;
+// Eyte position
 float eyeXDirection = 2.0f;
 float eyeYDirection = 2.0f;
 float eyeZDirection = 2.0f;
+// Look-at position
+float lookAtX = 0.0f;
+float lookAtY = 0.0f;
+float lookAtZ = 0.0f;
+// Up vector
+float upX = 0.0f;
+float upY = 1.0f;
+float upZ = 0.0f;
 // Controla el modo en que se comporta la cámara
 unsigned int mode = 0;
 unsigned int TOTAL_MODES = 2;
@@ -18,10 +33,12 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
+    eyeXDirection = upX + cameraRadius * sin(cameraAngle);
+    eyeYDirection = upY + cameraHeight;
+    eyeZDirection = upZ + cameraRadius * cos(cameraAngle);
     gluLookAt(eyeXDirection, eyeYDirection, eyeZDirection, // Eye position
-              0.0, 0.0, 0.0,                               // Look-at position
-              0.0, 1.0, 0.0);                              // Up vector
+              lookAtX, lookAtY, lookAtZ,                   // Look-at position
+              upX, upY, upZ);                              // Up vector
 
     float rotationCoords[] = {0.0f, 1.0f, 0.0f};
     struct Color3f teapotColor;
@@ -90,35 +107,32 @@ void extraKeyBoardInput(int key, int x, int y)
     x = x;
     y = y;
 
-    const float inc = 0.5f;
+    const float inc = 0.1f;
+    bool adjustCamAng = false;
 
     switch (key)
     {
     case GLUT_KEY_DOWN:
         if (mode == 0)
         {
-            eyeYDirection -= inc;
-        }
-        else
-        {
-            eyeZDirection -= inc;
+            cameraRadius += inc;
+            adjustCamAng = true;
         }
         break;
     case GLUT_KEY_UP:
         if (mode == 0)
         {
-            eyeYDirection += inc;
-        }
-        else
-        {
-            eyeZDirection += inc;
+            cameraRadius -= inc;
+            adjustCamAng = true;
         }
         break;
     case GLUT_KEY_LEFT:
-        eyeXDirection -= inc;
+        // Rotate camera around the object counterclockwise
+        cameraAngle += 0.1f;
         break;
     case GLUT_KEY_RIGHT:
-        eyeXDirection += inc;
+        // Rotate camera around the object clockwise
+        cameraAngle -= 0.1f;
         break;
     case GLUT_KEY_F1:
         eyeXDirection = 2.0;
@@ -147,6 +161,11 @@ void extraKeyBoardInput(int key, int x, int y)
         break;
     default:
         break;
+    }
+    if (adjustCamAng)
+    {
+        // Adjust camera height relative to the object's center
+        cameraHeight = cameraRadius * sin(cameraAngle);
     }
 }
 
