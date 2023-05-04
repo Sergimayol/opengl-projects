@@ -4,6 +4,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <math.h>
+#include <stdbool.h>
 
 #define ALPHA 0.3f
 
@@ -27,3 +28,18 @@
 #define DARK_ALPHA 0.13725490196f, 0.14901960784f, 0.20392156863f, ALPHA
 #define PURE_BLACK_ALPHA 0.0f, 0.0f, 0.0f, ALPHA
 #define PURE_WHITE_ALPHA 1.0f, 1.0f, 1.0f, ALPHA
+
+struct Color3f
+{
+    float r;
+    float b;
+    float g;
+};
+
+struct Color4f
+{
+    float r;
+    float b;
+    float g;
+    float a;
+};

@@ -6,6 +6,12 @@ const float ESCALADO_FIG = 1.5f;
 bool displayPlane = false;
 bool displayAxis = true;
 unsigned char fig = '1';
+float eyeXDirection = 2.0f;
+float eyeYDirection = 2.0f;
+float eyeZDirection = 2.0f;
+// Controla el modo en que se comporta la cámara
+unsigned int mode = 0;
+unsigned int TOTAL_MODES = 2;
 
 void display()
 {
@@ -13,9 +19,16 @@ void display()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    gluLookAt(2.0, 2.0, 2.0,  // Eye position
-              0.0, 0.0, 0.0,  // Look-at position
-              0.0, 1.0, 0.0); // Up vector
+    gluLookAt(eyeXDirection, eyeYDirection, eyeZDirection, // Eye position
+              0.0, 0.0, 0.0,                               // Look-at position
+              0.0, 1.0, 0.0);                              // Up vector
+
+    float rotationCoords[] = {0.0f, 1.0f, 0.0f};
+    struct Color3f teapotColor;
+    teapotColor.r = 1.0f;
+    teapotColor.g = 0.0f;
+    teapotColor.b = 0.0f;
+    drawTeapot(0.5 * ESCALADO_FIG, 0, rotationCoords, true, teapotColor);
 
     if (displayPlane)
     {
@@ -56,17 +69,93 @@ void manageKeyBoardInput(unsigned char key, int x, int y)
     case 'p':
         displayPlane = !displayPlane;
         break;
+    case 'm':
+        if (mode == TOTAL_MODES - 1)
+        {
+            mode = 0;
+        }
+        else
+        {
+            mode += 1;
+        }
+        break;
     default:
         break;
     }
 }
 
-void reshapeFrustum(GLsizei width, GLsizei height)
+void extraKeyBoardInput(int key, int x, int y)
+{
+    // Avoid unused warning
+    x = x;
+    y = y;
+
+    const float inc = 0.5f;
+
+    switch (key)
+    {
+    case GLUT_KEY_DOWN:
+        if (mode == 0)
+        {
+            eyeYDirection -= inc;
+        }
+        else
+        {
+            eyeZDirection -= inc;
+        }
+        break;
+    case GLUT_KEY_UP:
+        if (mode == 0)
+        {
+            eyeYDirection += inc;
+        }
+        else
+        {
+            eyeZDirection += inc;
+        }
+        break;
+    case GLUT_KEY_LEFT:
+        eyeXDirection -= inc;
+        break;
+    case GLUT_KEY_RIGHT:
+        eyeXDirection += inc;
+        break;
+    case GLUT_KEY_F1:
+        eyeXDirection = 2.0;
+        eyeYDirection = 2.0;
+        eyeZDirection = 2.0;
+        break;
+    case GLUT_KEY_F2:
+        eyeXDirection = 1.0;
+        eyeYDirection = 3.2;
+        eyeZDirection = 2.5;
+        break;
+    case GLUT_KEY_F3:
+        eyeXDirection = 3.6;
+        eyeYDirection = 1.3;
+        eyeZDirection = 2.0;
+        break;
+    case GLUT_KEY_F4:
+        eyeXDirection = 1.2;
+        eyeYDirection = 1.5;
+        eyeZDirection = 2.9;
+        break;
+    case GLUT_KEY_F5:
+        eyeXDirection = 3.0;
+        eyeYDirection = 2.2;
+        eyeZDirection = 2.7;
+        break;
+    default:
+        break;
+    }
+}
+
+void reshape(int width, int height)
 {
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10.0);
+    gluPerspective(45.0, (double)width / (double)height, 1.0, 10.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -86,8 +175,9 @@ int main(int argc, char **argv)
 
     // Indicamos cuales son las funciones de redibujado e idle
     glutDisplayFunc(display);
-    glutReshapeFunc(reshapeFrustum);
+    glutReshapeFunc(reshape);
     glutKeyboardFunc(manageKeyBoardInput);
+    glutSpecialFunc(extraKeyBoardInput);
     glutIdleFunc(idle);
 
     glClearColor(BG_COLOR);

@@ -1,3 +1,3 @@
-#include "AxisAndPlanes.h"
 #include "base.h"
-#include <stdbool.h>
+#include "AxisAndPlanes.h"
+#include "figures.h"
