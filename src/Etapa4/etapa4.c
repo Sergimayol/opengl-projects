@@ -5,6 +5,7 @@ const int W_HEIGHT = 600;
 const float ESCALADO_FIG = 1.5f;
 bool displayPlane = false;
 bool displayAxis = true;
+bool displayWired = true;
 unsigned char fig = '1';
 // Rotation camera angle
 float cameraAngle = 0.0f;
@@ -27,6 +28,10 @@ float upZ = 0.0f;
 // Controla el modo en que se comporta la cámara
 unsigned int mode = 0;
 unsigned int TOTAL_MODES = 2;
+// The camera will rotate from the center object of the scene
+const unsigned int ROTATE_FROM_CENTER = 0;
+// The camera will rotate from his own axis
+const unsigned int ROTATE_FROM_OWN = 1;
 
 void display()
 {
@@ -39,13 +44,24 @@ void display()
     gluLookAt(eyeXDirection, eyeYDirection, eyeZDirection, // Eye position
               lookAtX, lookAtY, lookAtZ,                   // Look-at position
               upX, upY, upZ);                              // Up vector
+                                                           // Up vector
 
     float rotationCoords[] = {0.0f, 1.0f, 0.0f};
-    struct Color3f teapotColor;
-    teapotColor.r = 1.0f;
-    teapotColor.g = 0.0f;
-    teapotColor.b = 0.0f;
-    drawTeapot(0.5 * ESCALADO_FIG, 0, rotationCoords, true, teapotColor);
+    struct Color3f figColor;
+    figColor.r = 0.251;
+    figColor.g = 0.51f;
+    figColor.b = 0.427f;
+    switch (fig)
+    {
+    case '1':
+        drawTeapot(0.5 * ESCALADO_FIG, 0, rotationCoords, displayWired, figColor);
+        break;
+    case '2':
+        drawDonut(0.5 * ESCALADO_FIG, 20, 0, rotationCoords, displayWired, figColor);
+        break;
+    default:
+        break;
+    }
 
     if (displayPlane)
     {
@@ -83,6 +99,9 @@ void manageKeyBoardInput(unsigned char key, int x, int y)
     case 27: // 'ESC'
         displayAxis = !displayAxis;
         break;
+    case 'w':
+        displayWired = !displayWired;
+        break;
     case 'p':
         displayPlane = !displayPlane;
         break;
@@ -113,51 +132,86 @@ void extraKeyBoardInput(int key, int x, int y)
     switch (key)
     {
     case GLUT_KEY_DOWN:
-        if (mode == 0)
+        if (mode == ROTATE_FROM_CENTER)
         {
             cameraRadius += inc;
             adjustCamAng = true;
         }
+        else if (mode == ROTATE_FROM_OWN)
+        {
+            lookAtY -= inc;
+        }
         break;
     case GLUT_KEY_UP:
-        if (mode == 0)
+        if (mode == ROTATE_FROM_CENTER)
         {
             cameraRadius -= inc;
             adjustCamAng = true;
         }
+        else if (mode == ROTATE_FROM_OWN)
+        {
+            lookAtY += inc;
+        }
         break;
     case GLUT_KEY_LEFT:
-        // Rotate camera around the object counterclockwise
-        cameraAngle += 0.1f;
+        if (mode == ROTATE_FROM_CENTER)
+        {
+            // Rotate camera around the object counterclockwise
+            cameraAngle += 0.1f;
+        }
+        else if (mode == ROTATE_FROM_OWN)
+        {
+            lookAtX -= inc;
+            lookAtZ -= inc;
+            adjustCamAng = true;
+        }
         break;
     case GLUT_KEY_RIGHT:
-        // Rotate camera around the object clockwise
-        cameraAngle -= 0.1f;
+        if (mode == ROTATE_FROM_CENTER)
+        {
+            // Rotate camera around the object clockwise
+            cameraAngle -= 0.1f;
+        }
+        else if (mode == ROTATE_FROM_OWN)
+        {
+            lookAtX += inc;
+            lookAtZ += inc;
+            adjustCamAng = true;
+        }
         break;
     case GLUT_KEY_F1:
-        eyeXDirection = 2.0;
-        eyeYDirection = 2.0;
-        eyeZDirection = 2.0;
+        cameraAngle = 3.2;
+        cameraRadius = 3.0;
+        cameraHeight = 4.2;
         break;
     case GLUT_KEY_F2:
-        eyeXDirection = 1.0;
-        eyeYDirection = 3.2;
-        eyeZDirection = 2.5;
+        cameraAngle = 7.5;
+        cameraRadius = 3.0;
+        cameraHeight = 5.2;
         break;
     case GLUT_KEY_F3:
-        eyeXDirection = 3.6;
-        eyeYDirection = 1.3;
-        eyeZDirection = 2.0;
+        cameraAngle = 4.6;
+        cameraRadius = 7.0;
+        cameraHeight = 2.5;
         break;
     case GLUT_KEY_F4:
-        eyeXDirection = 1.2;
-        eyeYDirection = 1.5;
-        eyeZDirection = 2.9;
+        cameraAngle = 1.9;
+        cameraRadius = 3.5;
+        cameraHeight = 4.0;
         break;
     case GLUT_KEY_F5:
-        eyeXDirection = 3.0;
-        eyeYDirection = 2.2;
-        eyeZDirection = 2.7;
+        cameraAngle = 6.5;
+        cameraRadius = 3.0;
+        cameraHeight = 4.2;
+        break;
+    case GLUT_KEY_F6:
+        cameraAngle = 2.9;
+        cameraRadius = 2.5;
+        cameraHeight = 1.2;
+        break;
+    case GLUT_KEY_F7:
+        cameraHeight = 0;
+        lookAtY = 0.0;
         break;
     default:
         break;
