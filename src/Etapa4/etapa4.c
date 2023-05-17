@@ -8,7 +8,8 @@ bool displayAxis = true;
 bool displayWired = true;
 unsigned char fig = '1';
 // Rotation camera angle
-float cameraAngle = 0.0f;
+float cameraAngleX = 0.0f;
+float cameraAngleY = 0.0f;
 // Rotation camera radius
 float cameraRadius = 5.0f;
 // Rotation camera height
@@ -38,9 +39,16 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    eyeXDirection = upX + cameraRadius * sin(cameraAngle);
+    eyeXDirection = upX + cameraRadius * sin(cameraAngleX) * cos(cameraAngleY);
     eyeYDirection = upY + cameraHeight;
-    eyeZDirection = upZ + cameraRadius * cos(cameraAngle);
+    eyeZDirection = upZ + cameraRadius * cos(cameraAngleX) * cos(cameraAngleY);
+
+    if (mode == ROTATE_FROM_CENTER)
+    {
+
+        eyeYDirection = upY + cameraRadius * sin(cameraAngleY);
+    }
+
     gluLookAt(eyeXDirection, eyeYDirection, eyeZDirection, // Eye position
               lookAtX, lookAtY, lookAtZ,                   // Look-at position
               upX, upY, upZ);                              // Up vector
@@ -87,6 +95,8 @@ void manageKeyBoardInput(unsigned char key, int x, int y)
     x = x;
     y = y;
 
+    const float inc = 0.1f;
+
     switch (key)
     {
     case '1':
@@ -95,6 +105,12 @@ void manageKeyBoardInput(unsigned char key, int x, int y)
     case '4':
     case '5':
         fig = key;
+        break;
+    case 'j':
+        cameraAngleY -= inc;
+        break;
+    case 'k':
+        cameraAngleY += inc;
         break;
     case 27: // 'ESC'
         displayAxis = !displayAxis;
@@ -157,7 +173,7 @@ void extraKeyBoardInput(int key, int x, int y)
         if (mode == ROTATE_FROM_CENTER)
         {
             // Rotate camera around the object counterclockwise
-            cameraAngle += 0.1f;
+            cameraAngleX -= 0.1f;
         }
         else if (mode == ROTATE_FROM_OWN)
         {
@@ -170,7 +186,7 @@ void extraKeyBoardInput(int key, int x, int y)
         if (mode == ROTATE_FROM_CENTER)
         {
             // Rotate camera around the object clockwise
-            cameraAngle -= 0.1f;
+            cameraAngleX += 0.1f;
         }
         else if (mode == ROTATE_FROM_OWN)
         {
@@ -180,32 +196,32 @@ void extraKeyBoardInput(int key, int x, int y)
         }
         break;
     case GLUT_KEY_F1:
-        cameraAngle = 3.2;
+        cameraAngleX = 3.2;
         cameraRadius = 3.0;
         cameraHeight = 4.2;
         break;
     case GLUT_KEY_F2:
-        cameraAngle = 7.5;
+        cameraAngleX = 7.5;
         cameraRadius = 3.0;
         cameraHeight = 5.2;
         break;
     case GLUT_KEY_F3:
-        cameraAngle = 4.6;
+        cameraAngleX = 4.6;
         cameraRadius = 7.0;
         cameraHeight = 2.5;
         break;
     case GLUT_KEY_F4:
-        cameraAngle = 1.9;
+        cameraAngleX = 1.9;
         cameraRadius = 3.5;
         cameraHeight = 4.0;
         break;
     case GLUT_KEY_F5:
-        cameraAngle = 6.5;
+        cameraAngleX = 6.5;
         cameraRadius = 3.0;
         cameraHeight = 4.2;
         break;
     case GLUT_KEY_F6:
-        cameraAngle = 2.9;
+        cameraAngleX = 2.9;
         cameraRadius = 2.5;
         cameraHeight = 1.2;
         break;
@@ -219,7 +235,7 @@ void extraKeyBoardInput(int key, int x, int y)
     if (adjustCamAng)
     {
         // Adjust camera height relative to the object's center
-        cameraHeight = cameraRadius * sin(cameraAngle);
+        cameraHeight = cameraRadius * sin(cameraAngleX);
     }
 }
 
