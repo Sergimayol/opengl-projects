@@ -1,4 +1,5 @@
 #pragma once
+#include <GL/gl.h>
 
 // Esta función permite dibujar una tetera en 3D
 void drawTeapot(const GLdouble size, float rotationAngle,
