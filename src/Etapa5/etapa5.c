@@ -20,22 +20,22 @@ float lookAtZ = 0.0f;
 float upX = 0.0f;
 float upY = 1.0f;
 float upZ = 0.0f;
-// Light colors
-GLfloat l1[] = {PURE_BLACK_ALPHA};
-GLfloat l2[] = {PURE_BLACK_ALPHA};
-GLfloat l3[] = {PURE_BLACK_ALPHA};
-GLfloat l4[] = {PURE_BLACK_ALPHA};
-//
-GLfloat posl1[] = {3.0f, 3.0f, 3.0f, 0.0f};
-GLfloat ambient[] = {PURE_BLACK_ALPHA};
-GLfloat diff[] = {PURE_WHITE_ALPHA};
-GLfloat spct[] = {PURE_WHITE};
+// Set light properties
+GLfloat light_position[] = { 1.0f, 1.0f, 1.0f, 0.0f };  // Light position
+GLfloat light_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };   // Ambient light color
+GLfloat light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };   // Diffuse light color
+GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };  // Specular light color
+// Set material properties
+GLfloat material_ambient[] = { 0.0f, 0.0f, 0.0f, 1.0f };     // Ambient material color
+GLfloat material_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };     // Diffuse material color
+GLfloat material_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };    // Specular material color
+GLfloat material_shininess[] = { 50.0f };                   // Shininess factor
+float fAngulo = 0.0f;
 
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_LIGHT0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -51,15 +51,16 @@ void display()
     switch (fig)
     {
     case '1':
-        drawTeapot(0.5 * ESCALADO_FIG, 0, rotationCoords, displayWired, figColor);
+        drawTeapot(0.5 * ESCALADO_FIG, fAngulo, rotationCoords, displayWired, figColor);
         break;
     case '2':
-        drawDonut(0.5 * ESCALADO_FIG, 20, 0, rotationCoords, displayWired, figColor);
+        drawDonut(0.5 * ESCALADO_FIG, 20, fAngulo, rotationCoords, displayWired, figColor);
         break;
     default:
         break;
     }
 
+    glDisable(GL_LIGHTING);
     if (displayPlane)
     {
         drawPlanes(ESCALADO_FIG);
@@ -69,21 +70,37 @@ void display()
     {
         draw3DAXis(ESCALADO_FIG + 0.2f);
     }
+    glEnable(GL_LIGHTING);
+
     glutSwapBuffers();
 }
 
 void idle()
 {
+    // Incrementamos el ángulo
+    fAngulo += 0.1f;
+    // Si es mayor que dos pi la decrementamos
+    if (fAngulo > 360)
+        fAngulo -= 360;
     // Indicamos que es necesario repintar la pantalla
     glutPostRedisplay();
 }
 
 void ligth()
-{
-    glLightfv(GL_LIGHT0, GL_POSITION, posl1);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, spct);
+{   
+    // Enable lighting
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, material_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, material_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, material_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, material_shininess);
 }
 
 void manageKeyBoardInput(unsigned char key, int x, int y)
@@ -147,13 +164,14 @@ int main(int argc, char **argv)
     glutCreateWindow("Etapa 5");
     glEnable(GL_LINE_SMOOTH | GL_DEPTH_TEST | GL_LIGHTING | GL_COLOR_MATERIAL);
 
+    ligth();
+
     // Indicamos cuales son las funciones de redibujado e idle
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(manageKeyBoardInput);
     glutSpecialFunc(extraKeyBoardInput);
     glutIdleFunc(idle);
-    ligth();
 
     glClearColor(BG_COLOR);
     glClear(GL_COLOR_BUFFER_BIT);
