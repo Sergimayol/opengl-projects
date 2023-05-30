@@ -23,14 +23,9 @@ float upY = 1.0f;
 float upZ = 0.0f;
 // Set light properties
 GLfloat light_position[] = {0.0f, 2.0f, 0.0f, 0.0f}; // Light position
-GLfloat light_ambient[] = {0.2f, 0.2f, 0.2f, 1.0f};	 // Ambient light color
-GLfloat light_diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};	 // Diffuse light color
-GLfloat light_specular[] = {1.0f, 1.0f, 1.0f, 1.0f}; // Specular light color
+GLfloat light_position1[] = {2.0f, 0.0f, 0.0f, 0.0f};
+GLfloat light_position2[] = {0.0f, 0.0f, 2.0f, 0.0f};
 // Set material properties
-GLfloat material_ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};	// Ambient material color
-GLfloat material_diffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};	// Diffuse material color
-GLfloat material_specular[] = {1.0f, 1.0f, 1.0f, 1.0f}; // Specular material color
-GLfloat material_shininess[] = {50.0f};					// Shininess factor
 float fAngulo = 0.0f;
 
 float rotationCoords[] = {0.0f, 1.0f, 0.0f};
@@ -91,6 +86,20 @@ void display()
 	}
 
 	glDisable(GL_LIGHTING);
+	if (light1On)
+	{
+		glPushMatrix();
+		glTranslatef(light_position1[0], light_position1[1], light_position1[2]);
+		drawSphere(0.1 * ESCALADO_FIG, 20, 20, rotationCoords, false, (struct Color3f){0.89803921569f, 0.78431372549f, 0.56470588235f});
+		glPopMatrix();
+	}
+	if (light2On)
+	{
+		glPushMatrix();
+		glTranslatef(light_position2[0], light_position2[1], light_position2[2]);
+		drawSphere(0.1 * ESCALADO_FIG, 20, 20, rotationCoords, false, (struct Color3f){0.65098039216f, 0.81960784314f, 0.53725490196f});
+		glPopMatrix();
+	}
 	if (displayPlane)
 	{
 		drawPlanes(ESCALADO_FIG);
@@ -101,9 +110,10 @@ void display()
 		draw3DAXis(ESCALADO_FIG + 0.2f);
 	}
 
+	glPushMatrix();
 	glTranslatef(light_position[0], light_position[1], light_position[2]);
 	drawSphere(0.1 * ESCALADO_FIG, 20, 20, rotationCoords, false, (struct Color3f){1.0f, 1.0f, 1.0f});
-	glTranslatef(0.0f, 0.0f, 0.0f);
+	glPopMatrix();
 
 	glEnable(GL_LIGHTING);
 
@@ -112,31 +122,35 @@ void display()
 
 void init_lights()
 {
+	const GLfloat mat_ambient[] = {0.1f, 0.1f, 0.1f, 1.0f};
+	const GLfloat mat_diffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};
+	const GLfloat mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+	const GLfloat mat_shininess[] = {50.0f};
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
 	// Enable lighting
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	const GLfloat light_ambient[] = {BG_COLOR}; // Ambient light color
+
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, (GLfloat[]){LIGHT});
+	glLightfv(GL_LIGHT0, GL_SPECULAR, (GLfloat[]){PURE_WHITE});
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
-	const GLfloat light_position1[] = {0.0f, 0.0f, 0.0f, 1.0f};
-	glLightfv(GL_LIGHT1, GL_POSITION, light_position1);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, (GLfloat[]){YELLOW});
+	glLightfv(GL_LIGHT1, GL_SPECULAR, (GLfloat[]){YELLOW});
+	glLightfv(GL_LIGHT1, GL_POSITION, light_position1);
 
-	const GLfloat light_position2[] = {0.0f, 0.0f, 0.0f, 1.0f};
-	glLightfv(GL_LIGHT2, GL_POSITION, light_position2);
 	glLightfv(GL_LIGHT2, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT2, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT2, GL_SPECULAR, light_specular);
-
-	glMaterialfv(GL_FRONT | GL_BACK, GL_AMBIENT, material_ambient);
-	glMaterialfv(GL_FRONT | GL_BACK, GL_DIFFUSE, material_diffuse);
-	glMaterialfv(GL_FRONT | GL_BACK, GL_SPECULAR, material_specular);
-	glMaterialfv(GL_FRONT | GL_BACK, GL_SHININESS, material_shininess);
+	glLightfv(GL_LIGHT2, GL_DIFFUSE, (GLfloat[]){BLUE});
+	glLightfv(GL_LIGHT2, GL_SPECULAR, (GLfloat[]){BLUE});
+	glLightfv(GL_LIGHT2, GL_POSITION, light_position2);
 }
 
 void idle()
@@ -257,7 +271,7 @@ int main(int argc, char **argv)
 
 	// Creamos la nueva ventana
 	glutCreateWindow("Etapa 5");
-	glEnable(GL_LINE_SMOOTH | GL_DEPTH_TEST | GL_LIGHTING | GL_COLOR_MATERIAL);
+	glEnable(GL_LINE_SMOOTH | GL_DEPTH_TEST | GL_COLOR_MATERIAL);
 
 	init_lights();
 
