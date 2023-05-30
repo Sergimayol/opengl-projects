@@ -10,3 +10,7 @@ void drawTeapot(const GLdouble size, float rotationAngle,
 void drawDonut(const GLdouble size, const int slices,
                float rotationAngle, float rotationCoords[],
                bool displayWired, struct Color3f figColor);
+
+void drawSphere(const GLdouble size, const int slices,
+                float rotationAngle, float rotationCoords[],
+                bool displayWired, struct Color3f figColor);
