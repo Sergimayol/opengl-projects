@@ -8,7 +8,7 @@
  * @struct Light
  * @brief Represents a light source.
  */
-typedef struct
+typedef struct Light
 {
 	int id;			   // The unique identifier of the light source.
 	bool status;	   // Indicates whether the light is turned on or off.
@@ -17,19 +17,6 @@ typedef struct
 	float specular[4]; // The specular color of the light in RGBA format.
 	float position[4]; // The position of the light in homogeneous coordinates.
 } Light;
-
-/**
- * @brief Creates a new Light struct with the given parameters.
- *
- * @param id The ID of the light source.
- * @param status The status of the light source (on/off).
- * @param ambient The ambient light color.
- * @param diffuse The diffuse light color.
- * @param specular The specular light color.
- * @param position The position of the light source.
- * @return The created Light struct.
- */
-Light createLight(int id, bool status, float ambient[4], float diffuse[4], float specular[4], float position[4]);
 
 /**
  * @brief Updates the color of a light source.
