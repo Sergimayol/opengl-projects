@@ -10,15 +10,15 @@ Las practicas de la asignatura de informática gráfica consisten en la realizac
 
 ## Índice
 
--   [Proyectos OpenGL](#proyectos-opengl)
-    -   [Índice](#índice)
-    -   [Desarollo](#desarollo)
-    -   [Estructura del repositorio](#estructura-del-repositorio)
-    -   [Etapa 1: Generación del Workspace y primer programa en Opengl mediante GLUT](#etapa-1-generación-del-workspace-y-primer-programa-en-opengl-mediante-glut)
-    -   [Etapa 2: Doble buffer y escalado](#etapa-2-doble-buffer-y-escalado)
-        -   [Ejemplos de transformaciones](#ejemplos-de-transformaciones)
-        -   [Doble pendulo](#doble-pendulo)
-    -   [Etapa 3: Escena 3D](#etapa-3-escena-3d)
+- [Proyectos OpenGL](#proyectos-opengl)
+  - [Índice](#índice)
+  - [Desarollo](#desarollo)
+  - [Estructura del repositorio](#estructura-del-repositorio)
+  - [Etapa 1: Generación del Workspace y primer programa en Opengl mediante GLUT](#etapa-1-generación-del-workspace-y-primer-programa-en-opengl-mediante-glut)
+  - [Etapa 2: Doble buffer y escalado](#etapa-2-doble-buffer-y-escalado)
+    - [Ejemplos de transformaciones](#ejemplos-de-transformaciones)
+    - [Doble pendulo](#doble-pendulo)
+  - [Etapa 3: Escena 3D](#etapa-3-escena-3d)
 
 ## Desarollo
 
@@ -63,3 +63,11 @@ El repositorio está organizado de la siguiente manera:
 ## Etapa 3: Escena 3D
 
 <p align="center"> <img width="30%" src=".github/img/Etapa3.png"> </p>
+
+## Etapa 4: Movimiento de camara
+
+<p align="center"> <img width="30%" src=".github/img/Etapa4.png"> </p>
+
+## Etapa 5: Luces materiales y sombreados
+
+<p align="center"> <img width="30%" src=".github/img/Etapa5.png"> </p>
