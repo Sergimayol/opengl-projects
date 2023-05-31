@@ -1,6 +1,9 @@
 #include "etapa5.h"
 #include <stdio.h>
 
+#define ON true
+#define OFF false
+
 const int W_WIDTH = 600;
 const int W_HEIGHT = 600;
 const float ESCALADO_FIG = 1.5f;
@@ -10,29 +13,20 @@ bool displayWired = true;
 unsigned char fig = '1';
 
 // Eye position
-
 struct Vector3f eyeDirection = {4.0f, 4.0f, 4.0f};
 // Look-at position
 struct Vector3f lookAt = {0.0f, 0.0f, 0.0f};
 // Up vector
 struct Vector3f up = {0.0f, 1.0f, 0.0f};
 
-// Set light properties
-GLfloat light_positions[4][4] = {
-	{0.0f, 2.0f, 0.0f, 0.0f},
-	{2.0f, 0.0f, 0.0f, 0.0f},
-	{0.0f, 2.0f, 0.0f, 0.0f},
-	{-2.0f, 0.0f, 0.0f, 0.0f}};
-struct Color3f light_colors[4] = {
-	{1.0f, 1.0f, 1.0f},
-	{0.89803921569f, 0.78431372549f, 0.56470588235f},
-	{0.54901960784f, 0.66666666667f, 0.93333333333f},
-	{0.65098039216f, 0.81960784314f, 0.53725490196f}};
-bool light_status[] = {true, false, false, false};
+Light lights[4] = {{0, ON, {BG_COLOR}, {PURE_WHITE}, {PURE_WHITE}, {0.0f, 2.0f, 0.0f, 0.0f}},
+				   {1, OFF, {BG_COLOR}, {RED}, {RED}, {2.0f, 0.0f, 0.0f, 0.0f}},
+				   {2, OFF, {BG_COLOR}, {BLUE}, {BLUE}, {0.0f, 2.0f, 0.0f, 0.0f}},
+				   {3, OFF, {BG_COLOR}, {GREEN}, {GREEN}, {-2.0f, 0.0f, 0.0f, 0.0f}}};
 
 float fAngulo = 0.0f;
 float rotationCoords[] = {0.0f, 1.0f, 0.0f};
-struct Color3f figColor = {0.251f, 0.51f, 0.427f};
+float figColor[] = {0.251f, 0.51f, 0.427f, 0.0f};
 
 bool isFlat = false;
 
@@ -53,23 +47,23 @@ void draw_figure(unsigned char index)
 }
 void manage_lights()
 {
-	const int arr_len = sizeof(light_status) / sizeof(light_status[0]);
+	const int arr_len = sizeof(lights) / sizeof(lights[0]);
 	for (int i = 0; i < arr_len; i++)
 	{
-		if (light_status[i])
+		if (lights[i].status)
 		{
-			glEnable(GL_LIGHT0 + i);
 
+			on(&lights[i]);
 			glDisable(GL_LIGHTING);
 			glPushMatrix();
-			glTranslatef(light_positions[i][0], light_positions[i][1], light_positions[i][2]);
-			drawSphere(0.1 * ESCALADO_FIG, 20, 20, rotationCoords, false, light_colors[i]);
+			glTranslatef(lights[i].position[0], lights[i].position[1], lights[i].position[2]);
+			drawSphere(0.1 * ESCALADO_FIG, 20, 20, rotationCoords, false, lights[i].specular);
 			glPopMatrix();
 			glEnable(GL_LIGHTING);
 		}
 		else
 		{
-			glDisable(GL_LIGHT0 + i);
+			off(&lights[i]);
 		}
 	}
 }
@@ -102,7 +96,6 @@ void init_lights()
 	const GLfloat mat_ambient[] = {0.1f, 0.1f, 0.1f, 1.0f};
 	const GLfloat mat_color[] = {LIGHT}; // Ambient light color
 	const GLfloat mat_shininess[] = {15.0f};
-	const GLfloat light_ambient[] = {BG_COLOR}; // Ambient light color
 
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_color);
@@ -112,13 +105,10 @@ void init_lights()
 	// Enable lighting
 	glEnable(GL_LIGHTING);
 
-	const int arr_len = sizeof(light_status) / sizeof(light_status[0]);
+	const int arr_len = sizeof(lights) / sizeof(lights[0]);
 	for (int i = 0; i < arr_len; i++)
 	{
-		glLightfv(GL_LIGHT0 + i, GL_AMBIENT, light_ambient);
-		glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, (GLfloat[]){light_colors[i].r, light_colors[i].g, light_colors[i].b});
-		glLightfv(GL_LIGHT0 + i, GL_SPECULAR, (GLfloat[]){light_colors[i].r, light_colors[i].g, light_colors[i].b});
-		glLightfv(GL_LIGHT0 + i, GL_POSITION, light_positions[i]);
+		updateLight(&lights[i]);
 	}
 	glEnable(GL_LIGHT0);
 }
@@ -162,33 +152,33 @@ void manageKeyBoardInput(unsigned char key, int x, int y)
 		break;
 	case 'a':
 		// pos x
-		light_positions[0][0] += inc;
-		glLightfv(GL_LIGHT0, GL_POSITION, light_positions[0]);
+		lights[0].position[0] += inc;
+		updatePosition(&lights[0]);
 		break;
 	case 'z':
 		// pos x
-		light_positions[0][0] -= inc;
-		glLightfv(GL_LIGHT0, GL_POSITION, light_positions[0]);
+		lights[0].position[0] -= inc;
+		updatePosition(&lights[0]);
 		break;
 	case 's':
 		// pos y
-		light_positions[0][1] += inc;
-		glLightfv(GL_LIGHT0, GL_POSITION, light_positions[0]);
+		lights[0].position[1] += inc;
+		updatePosition(&lights[0]);
 		break;
 	case 'x':
 		// pos y
-		light_positions[0][1] -= inc;
-		glLightfv(GL_LIGHT0, GL_POSITION, light_positions[0]);
+		lights[0].position[1] -= inc;
+		updatePosition(&lights[0]);
 		break;
 	case 'd':
 		// pos z
-		light_positions[0][2] += inc;
-		glLightfv(GL_LIGHT0, GL_POSITION, light_positions[0]);
+		lights[0].position[2] += inc;
+		updatePosition(&lights[0]);
 		break;
 	case 'c':
 		// pos z
-		light_positions[0][2] -= inc;
-		glLightfv(GL_LIGHT0, GL_POSITION, light_positions[0]);
+		lights[0].position[2] -= inc;
+		updatePosition(&lights[0]);
 		break;
 	case 32: // Space
 		// Change light mode
@@ -210,16 +200,16 @@ void extraKeyBoardInput(int key, int x, int y)
 	switch (key)
 	{
 	case GLUT_KEY_F1:
-		light_status[0] = !light_status[0];
+		lights[0].status = !lights[0].status;
 		break;
 	case GLUT_KEY_F2:
-		light_status[1] = !light_status[1];
+		lights[1].status = !lights[1].status;
 		break;
 	case GLUT_KEY_F3:
-		light_status[2] = !light_status[2];
+		lights[2].status = !lights[2].status;
 		break;
 	case GLUT_KEY_F4:
-		light_status[3] = !light_status[3];
+		lights[3].status = !lights[3].status;
 		break;
 	default:
 		break;
