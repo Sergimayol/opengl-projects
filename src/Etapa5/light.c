@@ -99,3 +99,16 @@ void updateSpecular(Light *light, GLfloat specular[4])
 		light->specular[i] = specular[i];
 	glLightfv(GL_LIGHT0 + light->id, GL_SPECULAR, light->specular);
 }
+
+/**
+ * @brief Updates the properties of a Light source.
+ *
+ * @param light The Light source to update.
+ */
+void update(Light *light)
+{
+	glLightfv(GL_LIGHT0 + light->id, GL_AMBIENT, light->ambient);
+	glLightfv(GL_LIGHT0 + light->id, GL_DIFFUSE, light->diffuse);
+	glLightfv(GL_LIGHT0 + light->id, GL_SPECULAR, light->specular);
+	glLightfv(GL_LIGHT0 + light->id, GL_POSITION, light->position);
+}
