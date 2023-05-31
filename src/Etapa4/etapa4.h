@@ -8,4 +8,3 @@ void idle();
 void manageKeyBoardInput(unsigned char key, int x, int y);
 void extraKeyBoardInput(int key, int x, int y);
 void reshape(int width, int height);
-

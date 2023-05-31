@@ -14,7 +14,7 @@ void initCamera(Camera *cam)
 	cam->up = (Vector3f){0.0f, 1.0f, 0.0f};
 }
 
-void calcTargetPoint(Camera* cam, float* x, float* y, float* z)
+void calcTargetPoint(Camera *cam, float *x, float *y, float *z)
 {
 	*x = cam->position.x + sin(cam->yaw);
 	*y = cam->position.y + sin(cam->pitch);
@@ -84,4 +84,3 @@ void printCamera(Camera *cam)
 	printf("\tUp: (%f, %f, %f)\n", cam->up.x, cam->up.y, cam->up.z);
 	printf("\n");
 }
-
