@@ -2,7 +2,7 @@
 
 void drawTeapot(const GLdouble size, float rotationAngle,
 				float rotationCoords[], bool displayWired,
-				struct Color3f figColor)
+				float figColor[])
 {
 	glPushMatrix();
 	glRotatef(rotationAngle, rotationCoords[0], rotationCoords[1], rotationCoords[2]); // rotate the cube
@@ -11,7 +11,8 @@ void drawTeapot(const GLdouble size, float rotationAngle,
 	glEnable(GL_DEPTH_TEST);
 
 	// set the color of the cube
-	glColor3f(figColor.r, figColor.g, figColor.b);
+	glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glColor4fv(figColor);
 
 	if (displayWired)
 	{
@@ -27,7 +28,7 @@ void drawTeapot(const GLdouble size, float rotationAngle,
 }
 void drawDonut(const GLdouble size, const int slices,
 			   float rotationAngle, float rotationCoords[],
-			   bool displayWired, struct Color3f figColor)
+			   bool displayWired, float figColor[])
 {
 	glPushMatrix();
 	glRotatef(rotationAngle, rotationCoords[0], rotationCoords[1], rotationCoords[2]); // rotate the cube
@@ -36,7 +37,8 @@ void drawDonut(const GLdouble size, const int slices,
 	glEnable(GL_DEPTH_TEST);
 
 	// set the color of the cube
-	glColor3f(figColor.r, figColor.g, figColor.b);
+	glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glColor4fv(figColor);
 
 	if (displayWired)
 	{
@@ -53,7 +55,7 @@ void drawDonut(const GLdouble size, const int slices,
 
 void drawSphere(const GLdouble size, const int slices,
 				float rotationAngle, float rotationCoords[],
-				bool displayWired, struct Color3f figColor)
+				bool displayWired, float figColor[])
 {
 	glPushMatrix();
 	glRotatef(rotationAngle, rotationCoords[0], rotationCoords[1], rotationCoords[2]); // rotate the cube
@@ -62,7 +64,8 @@ void drawSphere(const GLdouble size, const int slices,
 	glEnable(GL_DEPTH_TEST);
 
 	// set the color of the cube
-	glColor3f(figColor.r, figColor.g, figColor.b);
+	glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glColor4fv(figColor);
 
 	if (displayWired)
 	{
