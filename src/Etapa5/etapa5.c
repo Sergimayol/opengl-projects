@@ -10,17 +10,12 @@ bool displayWired = true;
 unsigned char fig = '1';
 
 // Eye position
-float eyeXDirection = 4.0f;
-float eyeYDirection = 4.0f;
-float eyeZDirection = 4.0f;
+
+struct Vector3f eyeDirection = {4.0f, 4.0f, 4.0f};
 // Look-at position
-float lookAtX = 0.0f;
-float lookAtY = 0.0f;
-float lookAtZ = 0.0f;
+struct Vector3f lookAt = {0.0f, 0.0f, 0.0f};
 // Up vector
-float upX = 0.0f;
-float upY = 1.0f;
-float upZ = 0.0f;
+struct Vector3f up = {0.0f, 1.0f, 0.0f};
 
 // Set light properties
 GLfloat light_positions[4][4] = {
@@ -31,8 +26,8 @@ GLfloat light_positions[4][4] = {
 struct Color3f light_colors[4] = {
 	{1.0f, 1.0f, 1.0f},
 	{0.89803921569f, 0.78431372549f, 0.56470588235f},
-	{0.65098039216f, 0.81960784314f, 0.53725490196f},
-	{0.54901960784f, 0.66666666667f, 0.93333333333f}};
+	{0.54901960784f, 0.66666666667f, 0.93333333333f},
+	{0.65098039216f, 0.81960784314f, 0.53725490196f}};
 bool light_status[] = {true, false, false, false};
 
 float fAngulo = 0.0f;
@@ -86,9 +81,9 @@ void display()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	gluLookAt(eyeXDirection, eyeYDirection, eyeZDirection, // Eye position
-			  lookAtX, lookAtY, lookAtZ,				   // Look-at position
-			  upX, upY, upZ);							   // Up vector
+	gluLookAt(eyeDirection.x, eyeDirection.y, eyeDirection.z,
+			  lookAt.x, lookAt.y, lookAt.z,
+			  up.x, up.y, up.z);
 
 	manage_lights();
 	draw_figure(fig);
