@@ -19,54 +19,43 @@ typedef struct Light
 } Light;
 
 /**
- * @brief Updates the color of a light source.
- * @param light A pointer to the Light structure to update.
- * @param color An array containing the new color values in RGBA format.
- */
-void updateColor(Light light, float color[4]);
-
-/**
  * @brief Turns on a light source.
  * @param light A pointer to the Light structure to turn on.
  */
-void on(Light light);
+void on(Light *light);
 
 /**
  * @brief Turns off a light source.
  * @param light A pointer to the Light structure to turn off.
  */
-void off(Light light);
+void off(Light *light);
 
 /**
  * @brief Updates the position of a light source.
  * @param light A pointer to the Light structure to update.
- * @param position An array containing the new position values in homogeneous coordinates.
  */
-void updatePosition(Light light, float position[4]);
+void updatePosition(Light *light);
 
 /**
  * @brief Updates the ambient color of a light source.
  * @param light A pointer to the Light structure to update.
- * @param ambient An array containing the new ambient color values in RGBA format.
  */
-void updateAmbient(Light light, float ambient[4]);
+void updateAmbient(Light *light);
 
 /**
  * @brief Updates the diffuse color of a light source.
  * @param light A pointer to the Light structure to update.
- * @param diffuse An array containing the new diffuse color values in RGBA format.
  */
-void updateDiffuse(Light light, float diffuse[4]);
+void updateDiffuse(Light *light);
 
 /**
  * @brief Updates the specular color of a light source.
  * @param light A pointer to the Light structure to update.
- * @param specular An array containing the new specular color values in RGBA format.
  */
-void updateSpecular(Light light, float specular[4]);
+void updateSpecular(Light *light);
 
 /**
  * @brief Updates the properties of a Light source.
  * @param light The Light source to update.
  */
-void update(Light *light);
+void updateLight(Light *light);

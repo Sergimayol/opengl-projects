@@ -16,13 +16,9 @@ typedef struct
  * @brief Updates the color properties of a Light source.
  *
  * @param light The Light source to update.
- * @param color The new color values [r, g, b, a].
  */
-void updateColor(Light *light, GLfloat color[4])
+void updateColor(Light *light)
 {
-	for (int i = 0; i < 4; i++)
-		light->diffuse[i] = light->specular[i] = color[i];
-
 	glLightfv(GL_LIGHT0 + light->id, GL_DIFFUSE, light->diffuse);
 	glLightfv(GL_LIGHT0 + light->id, GL_SPECULAR, light->specular);
 }
@@ -53,12 +49,9 @@ void off(Light *light)
  * @brief Updates the position of a Light source.
  *
  * @param light    The Light source to update.
- * @param position The new position values [x, y, z, w].
  */
-void updatePosition(Light *light, GLfloat position[4])
+void updatePosition(Light *light)
 {
-	for (int i = 0; i < 4; i++)
-		light->position[i] = position[i];
 	glLightfv(GL_LIGHT0 + light->id, GL_POSITION, light->position);
 }
 
@@ -66,12 +59,9 @@ void updatePosition(Light *light, GLfloat position[4])
  * @brief Updates the ambient color of a Light source.
  *
  * @param light   The Light source to update.
- * @param ambient The new ambient color values [r, g, b, a].
  */
-void updateAmbient(Light *light, GLfloat ambient[4])
+void updateAmbient(Light *light)
 {
-	for (int i = 0; i < 4; i++)
-		light->ambient[i] = ambient[i];
 	glLightfv(GL_LIGHT0 + light->id, GL_AMBIENT, light->ambient);
 }
 
@@ -79,12 +69,9 @@ void updateAmbient(Light *light, GLfloat ambient[4])
  * @brief Updates the diffuse color of a Light source.
  *
  * @param light   The Light source to update.
- * @param diffuse The new diffuse color values [r, g, b, a].
  */
-void updateDiffuse(Light *light, GLfloat diffuse[4])
+void updateDiffuse(Light *light)
 {
-	for (int i = 0; i < 4; i++)
-		light->diffuse[i] = diffuse[i];
 	glLightfv(GL_LIGHT0 + light->id, GL_DIFFUSE, light->diffuse);
 }
 
@@ -92,12 +79,9 @@ void updateDiffuse(Light *light, GLfloat diffuse[4])
  * @brief Updates the specular color of a Light source.
  *
  * @param light    The Light source to update.
- * @param specular The new specular color values [r, g, b, a].
  */
-void updateSpecular(Light *light, GLfloat specular[4])
+void updateSpecular(Light *light)
 {
-	for (int i = 0; i < 4; i++)
-		light->specular[i] = specular[i];
 	glLightfv(GL_LIGHT0 + light->id, GL_SPECULAR, light->specular);
 }
 
@@ -106,7 +90,7 @@ void updateSpecular(Light *light, GLfloat specular[4])
  *
  * @param light The Light source to update.
  */
-void update(Light *light)
+void updateLight(Light *light)
 {
 	glLightfv(GL_LIGHT0 + light->id, GL_AMBIENT, light->ambient);
 	glLightfv(GL_LIGHT0 + light->id, GL_DIFFUSE, light->diffuse);
