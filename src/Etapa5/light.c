@@ -12,6 +12,29 @@ typedef struct
 } Light;
 
 /**
+ * @brief Creates a new Light struct with the given parameters.
+ *
+ * @param id The ID of the light source.
+ * @param status The status of the light source (on/off).
+ * @param ambient The ambient light color.
+ * @param diffuse The diffuse light color.
+ * @param specular The specular light color.
+ * @param position The position of the light source.
+ * @return The created Light struct.
+ */
+Light createLight(int id, bool status, float ambient[4], float diffuse[4], float specular[4], float position[4])
+{
+	Light light;
+	light.id = id;
+	light.status = status;
+	memcpy(light.ambient, ambient, sizeof(float) * 4);
+	memcpy(light.diffuse, diffuse, sizeof(float) * 4);
+	memcpy(light.specular, specular, sizeof(float) * 4);
+	memcpy(light.position, position, sizeof(float) * 4);
+	return light;
+}
+
+/**
  * @brief Updates the color properties of a Light source.
  *
  * @param light The Light source to update.

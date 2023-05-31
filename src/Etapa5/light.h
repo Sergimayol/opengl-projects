@@ -19,6 +19,19 @@ typedef struct
 } Light;
 
 /**
+ * @brief Creates a new Light struct with the given parameters.
+ *
+ * @param id The ID of the light source.
+ * @param status The status of the light source (on/off).
+ * @param ambient The ambient light color.
+ * @param diffuse The diffuse light color.
+ * @param specular The specular light color.
+ * @param position The position of the light source.
+ * @return The created Light struct.
+ */
+Light createLight(int id, bool status, float ambient[4], float diffuse[4], float specular[4], float position[4]);
+
+/**
  * @brief Updates the color of a light source.
  * @param light A pointer to the Light structure to update.
  * @param color An array containing the new color values in RGBA format.
