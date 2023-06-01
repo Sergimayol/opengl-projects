@@ -1,5 +1,4 @@
 #include "etapa6.h"
-#include <stdio.h>
 
 #define ON true
 #define OFF false
@@ -10,7 +9,7 @@ const float ESCALADO_FIG = 1.5f;
 const float inc = 0.3f;
 bool displayPlane = false;
 bool displayAxis = true;
-const char *bookObj = "/mnt/c/Users/ruben/Documents/Github/opengl-projects/src/Etapa6/objetos/book/book.obj";
+const char *bookObj = "./src/Etapa6/objetos/book/book.obj";
 
 Light lights[4] = {{0, ON, {BG_COLOR}, {PURE_WHITE}, {PURE_WHITE}, {0.0f, 2.0f, 0.0f, 0.0f}},
 				   {1, OFF, {BG_COLOR}, {RED}, {RED}, {2.0f, 0.0f, 0.0f, 0.0f}},
