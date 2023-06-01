@@ -63,6 +63,7 @@ void display()
 	updateCamera(&cam);
 
 	glPushMatrix();
+	glRotatef(fAngulo, 0.0f, 1.0f, 0.0f);
 	glTranslatef(0.48f, 0.0f, 0.15f);
 	draw_object(&book);
 	glPopMatrix();
