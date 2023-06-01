@@ -1,4 +1,5 @@
 #include "etapa6.h"
+#include "base.h"
 #include "object.h"
 #include <GL/gl.h>
 
@@ -13,6 +14,7 @@ bool displayPlane = false;
 bool displayAxis = true;
 const char *bookObj = "./src/Etapa6/objetos/book/book.obj";
 const char *candleObj = "./src/Etapa6/objetos/candle/candle.obj";
+const char *statueObj = "./src/Etapa6/objetos/statue/ChessKing.obj";
 
 Light lights[4] = {{0, ON, {BG_COLOR}, {PURE_WHITE}, {PURE_WHITE}, {0.0f, 2.0f, 0.0f, 0.0f}},
 				   {1, OFF, {BG_COLOR}, {RED}, {RED}, {2.0f, 0.0f, 0.0f, 0.0f}},
@@ -28,6 +30,7 @@ bool isFlat = false;
 Camera cam;
 Object book;
 Object candle;
+Object statue;
 
 const float scaleFactor = 0.05;
 
@@ -66,6 +69,13 @@ void display()
 	glRotatef(fAngulo, 0.0f, 1.0f, 0.0f);
 	glTranslatef(0.48f, 0.0f, 0.15f);
 	draw_object(&book);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	glScalef(6.0f, 6.0f, 6.0f);
+	glRotatef(fAngulo, 0.0f, 1.0f, 0.0f);
+	draw_object(&statue);
 	glPopMatrix();
 
 	glPushMatrix();
@@ -257,6 +267,9 @@ int main(int argc, char **argv)
 
 	init_object(&candle);
 	load_object(&candle, candleObj);
+
+	init_object(&statue);
+	load_object(&statue, statueObj);
 
 	init_lights();
 
