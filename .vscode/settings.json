@@ -1,7 +1,11 @@
 {
-    "editor.formatOnSave": true,
-    "files.associations": {
-        "base.h": "c"
-    },
-    "C_Cpp.errorSquiggles": "disabled",
+	"editor.formatOnSave": true,
+	"files.associations": {
+		"base.h": "c",
+		"xlocale": "cpp",
+		"axisandplanes.h": "c",
+		"object.h": "c",
+		"etapa6.h": "c"
+	},
+	"C_Cpp.errorSquiggles": "disabled"
 }

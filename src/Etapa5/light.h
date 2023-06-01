@@ -31,6 +31,12 @@ void on(Light *light);
 void off(Light *light);
 
 /**
+ * @brief Toggles a light source.
+ * @param light A pointer to the Light structure to toggle.
+ */
+void toggle(Light *light);
+
+/**
  * @brief Updates the position of a light source.
  * @param light A pointer to the Light structure to update.
  */

@@ -43,3 +43,10 @@ struct Color4f
 	float g;
 	float a;
 };
+
+typedef struct Vector3f
+{
+	float x;
+	float y;
+	float z;
+} Vector3f;

@@ -46,6 +46,17 @@ void off(Light *light)
 }
 
 /**
+ * @brief Toggles a Light source.
+ *
+ * @param light The Light source to toggle.
+ */
+void toggle(Light *light)
+{
+	light->status = !light->status;
+	light->status ? glEnable(GL_LIGHT0 + light->id) : glDisable(GL_LIGHT0 + light->id);
+}
+
+/**
  * @brief Updates the position of a Light source.
  *
  * @param light    The Light source to update.
