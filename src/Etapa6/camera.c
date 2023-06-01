@@ -46,12 +46,12 @@ void rotateCameraLeft(Camera *cam, float angle)
 
 void rotateCameraUp(Camera *cam, float angle)
 {
-	cam->pitch -= angle;
+	cam->pitch += angle;
 }
 
 void rotateCameraDown(Camera *cam, float angle)
 {
-	cam->pitch += angle;
+	cam->pitch -= angle;
 }
 
 void moveCameraUp(Camera *cam, float inc)
