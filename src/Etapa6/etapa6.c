@@ -1,4 +1,6 @@
 #include "etapa6.h"
+#include "object.h"
+#include <GL/gl.h>
 
 #define ON true
 #define OFF false
@@ -6,10 +8,11 @@
 const int W_WIDTH = 600;
 const int W_HEIGHT = 600;
 const float ESCALADO_FIG = 1.5f;
-const float inc = 0.3f;
+const float inc = 0.1f;
 bool displayPlane = false;
 bool displayAxis = true;
 const char *bookObj = "./src/Etapa6/objetos/book/book.obj";
+const char *candleObj = "./src/Etapa6/objetos/candle/candle.obj";
 
 Light lights[4] = {{0, ON, {BG_COLOR}, {PURE_WHITE}, {PURE_WHITE}, {0.0f, 2.0f, 0.0f, 0.0f}},
 				   {1, OFF, {BG_COLOR}, {RED}, {RED}, {2.0f, 0.0f, 0.0f, 0.0f}},
@@ -24,6 +27,9 @@ bool isFlat = false;
 
 Camera cam;
 Object book;
+Object candle;
+
+const float scaleFactor = 0.05;
 
 void manage_lights()
 {
@@ -59,6 +65,12 @@ void display()
 	glPushMatrix();
 	glTranslatef(0.48f, 0.0f, 0.15f);
 	draw_object(&book);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0f, 0.0f, -2.0f);
+	glScalef(scaleFactor, scaleFactor, scaleFactor);
+	draw_object(&candle);
 	glPopMatrix();
 
 	manage_lights();
@@ -238,8 +250,13 @@ int main(int argc, char **argv)
 	glEnable(GL_LINE_SMOOTH | GL_DEPTH_TEST | GL_COLOR_MATERIAL);
 
 	initCamera(&cam);
+
 	init_object(&book);
 	load_object(&book, bookObj);
+
+	init_object(&candle);
+	load_object(&candle, candleObj);
+
 	init_lights();
 
 	// Indicamos cuales son las funciones de redibujado e idle
