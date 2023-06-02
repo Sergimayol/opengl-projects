@@ -2,6 +2,7 @@
 #include "base.h"
 #include "object.h"
 #include <GL/gl.h>
+#include <stdio.h>
 
 #define ON true
 #define OFF false
@@ -12,9 +13,14 @@ const float ESCALADO_FIG = 1.5f;
 const float inc = 0.1f;
 bool displayPlane = false;
 bool displayAxis = true;
-const char *bookObj = "./src/Etapa6/objetos/book/book.obj";
-const char *candleObj = "./src/Etapa6/objetos/candle/candle.obj";
-const char *statueObj = "./src/Etapa6/objetos/statue/ChessKing.obj";
+float fogDensity = 0.02f;
+
+Camera cam = {
+	.position = {0.0f, 1.6f, 3.8f},
+	.lookingAt = {0.0f, 0.0f, 4.0f},
+	.up = {0.0f, 1.0f, 0.0f},
+	.yaw = 0.0f,
+	.pitch = -0.4f};
 
 Light lights[4] = {{0, ON, {BG_COLOR}, {PURE_WHITE}, {PURE_WHITE}, {0.0f, 2.0f, 0.0f, 0.0f}},
 				   {1, OFF, {BG_COLOR}, {RED}, {RED}, {2.0f, 0.0f, 0.0f, 0.0f}},
@@ -27,10 +33,20 @@ float figColor[] = {0.251f, 0.51f, 0.427f, 0.0f};
 
 bool isFlat = false;
 
-Camera cam;
 Object book;
+const char *bookObj = "./src/Etapa6/objetos/book.obj";
+
 Object candle;
+const char *candleObj = "./src/Etapa6/objetos/candle.obj";
+
 Object statue;
+const char *statueObj = "./src/Etapa6/objetos/ChessKing.obj";
+
+Object rat;
+const char *ratObj = "./src/Etapa6/objetos/rat.obj";
+
+Object lobster;
+const char *lobsterObj = "./src/Etapa6/objetos/lobster.obj";
 
 const float scaleFactor = 0.05;
 
@@ -65,6 +81,10 @@ void display()
 
 	updateCamera(&cam);
 
+	glFogf(GL_FOG_DENSITY, fogDensity); // Set fog density
+
+	drawFloor(5);
+
 	glPushMatrix();
 	glRotatef(fAngulo, 0.0f, 1.0f, 0.0f);
 	glTranslatef(0.48f, 0.0f, 0.15f);
@@ -84,6 +104,19 @@ void display()
 	draw_object(&candle);
 	glPopMatrix();
 
+	glPushMatrix();
+	glTranslatef(0.0f, 0.0f, 2.0f);
+	glScalef(scaleFactor * 0.25f, scaleFactor * 0.25f, scaleFactor * 0.25f);
+	glRotatef(fAngulo * 13, 0.0f, 1.0f, 0.0f);
+	draw_object(&rat);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-2.0f, 0.0f, 0.0f);
+	glScalef(scaleFactor, scaleFactor, scaleFactor);
+	draw_object(&lobster);
+	glPopMatrix();
+
 	manage_lights();
 	glShadeModel(isFlat ? GL_FLAT : GL_SMOOTH);
 
@@ -97,15 +130,6 @@ void display()
 
 void init_lights()
 {
-	const GLfloat mat_ambient[] = {0.1f, 0.1f, 0.1f, 1.0f};
-	const GLfloat mat_color[] = {LIGHT}; // Ambient light color
-	const GLfloat mat_shininess[] = {15.0f};
-
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_color);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_color);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
-
 	// Enable lighting
 	glEnable(GL_LIGHTING);
 
@@ -114,6 +138,7 @@ void init_lights()
 	{
 		updateLight(&lights[i]);
 	}
+
 	glEnable(GL_LIGHT0);
 }
 
@@ -193,10 +218,18 @@ void manageKeyBoardInput(unsigned char key, int x, int y)
 		break;
 	case 'e': // Move camera down
 		moveCameraDown(&cam, inc);
+		break;
+	case 'x':
+		fogDensity += 0.01f;
+		break;
+	case 'z':
+		fogDensity -= 0.01f;
+		break;
 	default:
 		break;
 	}
 
+	printCamera(&cam);
 	glutPostRedisplay();
 }
 
@@ -246,6 +279,18 @@ void reshape(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+void initFog()
+{
+
+	glEnable(GL_DEPTH_TEST); // Enable depth testing
+	glEnable(GL_FOG);		 // Enable fog
+
+	glFogi(GL_FOG_MODE, GL_EXP);					   // Set fog mode to exponential
+	glFogfv(GL_FOG_COLOR, (float[]){LIGHT_RAW, 1.0f}); // Set fog color
+	glFogf(GL_FOG_DENSITY, fogDensity);				   // Set fog density
+	glHint(GL_FOG_HINT, GL_NICEST);					   // Set fog hint
+}
+
 int main(int argc, char **argv)
 {
 	// Inicializamos la librería GLUT
@@ -260,7 +305,9 @@ int main(int argc, char **argv)
 	glutCreateWindow("Etapa 6");
 	glEnable(GL_LINE_SMOOTH | GL_DEPTH_TEST | GL_COLOR_MATERIAL);
 
-	initCamera(&cam);
+	initFog();
+
+	init_lights();
 
 	init_object(&book);
 	load_object(&book, bookObj);
@@ -271,7 +318,11 @@ int main(int argc, char **argv)
 	init_object(&statue);
 	load_object(&statue, statueObj);
 
-	init_lights();
+	init_object(&rat);
+	load_object(&rat, ratObj);
+
+	init_object(&lobster);
+	load_object(&lobster, lobsterObj);
 
 	// Indicamos cuales son las funciones de redibujado e idle
 	glutDisplayFunc(display);
@@ -280,7 +331,7 @@ int main(int argc, char **argv)
 	glutSpecialFunc(extraKeyBoardInput);
 	glutIdleFunc(idle);
 
-	glClearColor(BG_COLOR);
+	glClearColor(PURE_BLACK);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// Comienza la ejecución del core de GLUT
