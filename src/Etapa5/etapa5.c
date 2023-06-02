@@ -91,7 +91,7 @@ void display()
 	glutSwapBuffers();
 }
 
-void init_lights()
+void initLights()
 {
 	const GLfloat mat_ambient[] = {0.1f, 0.1f, 0.1f, 1.0f};
 	const GLfloat mat_color[] = {LIGHT}; // Ambient light color
@@ -239,7 +239,7 @@ int main(int argc, char **argv)
 	glutCreateWindow("Etapa 5");
 	glEnable(GL_LINE_SMOOTH | GL_DEPTH_TEST | GL_COLOR_MATERIAL);
 
-	init_lights();
+	initLights();
 
 	// Indicamos cuales son las funciones de redibujado e idle
 	glutDisplayFunc(display);

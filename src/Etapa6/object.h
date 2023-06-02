@@ -9,8 +9,9 @@ typedef struct Object
 	const struct aiScene *scene;
 	struct aiMesh *mesh;
 	struct aiMaterial *material;
+	const char *objPath;
 } Object;
 
 void init_object(Object *object);
-void load_object(Object *object, const char *filePath);
+void load_object(Object *object);
 void draw_object(Object *object);

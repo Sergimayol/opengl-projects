@@ -12,9 +12,9 @@ void init_object(Object *object)
 	object->material = NULL;
 }
 
-void load_object(Object *object, const char *filePath)
+void load_object(Object *object)
 {
-	object->scene = aiImportFile(filePath, aiProcessPreset_TargetRealtime_MaxQuality);
+	object->scene = aiImportFile(object->objPath, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (!object->scene)
 	{
 		printf("Error loading model: %s\n", aiGetErrorString());

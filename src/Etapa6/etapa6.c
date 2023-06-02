@@ -22,10 +22,10 @@ Camera cam = {
 	.yaw = 0.0f,
 	.pitch = -0.4f};
 
-Light lights[4] = {{0, ON, {BG_COLOR}, {PURE_WHITE}, {PURE_WHITE}, {0.0f, 2.0f, 0.0f, 0.0f}},
-				   {1, OFF, {BG_COLOR}, {RED}, {RED}, {2.0f, 0.0f, 0.0f, 0.0f}},
-				   {2, OFF, {BG_COLOR}, {BLUE}, {BLUE}, {0.0f, 2.0f, 0.0f, 0.0f}},
-				   {3, OFF, {BG_COLOR}, {GREEN}, {GREEN}, {-2.0f, 0.0f, 0.0f, 0.0f}}};
+Light lights[] = {{0, ON, {BG_COLOR}, {PURE_WHITE}, {PURE_WHITE}, {0.0f, 2.0f, 0.0f, 0.0f}},
+				  {1, OFF, {BG_COLOR}, {RED}, {RED}, {2.0f, 0.0f, 0.0f, 0.0f}},
+				  {2, OFF, {BG_COLOR}, {BLUE}, {BLUE}, {0.0f, 2.0f, 0.0f, 0.0f}},
+				  {3, OFF, {BG_COLOR}, {GREEN}, {GREEN}, {-2.0f, 0.0f, 0.0f, 0.0f}}};
 
 float fAngulo = 0.0f;
 float rotationCoords[] = {0.0f, 1.0f, 0.0f};
@@ -33,21 +33,19 @@ float figColor[] = {0.251f, 0.51f, 0.427f, 0.0f};
 
 bool isFlat = false;
 
-Object book;
-const char *bookObj = "./src/Etapa6/objetos/book.obj";
-
-Object candle;
-const char *candleObj = "./src/Etapa6/objetos/candle.obj";
-
-Object statue;
-const char *statueObj = "./src/Etapa6/objetos/ChessKing.obj";
-
-Object rat;
-const char *ratObj = "./src/Etapa6/objetos/rat.obj";
-
-Object lobster;
-const char *lobsterObj = "./src/Etapa6/objetos/lobster.obj";
-
+Object objects[] = {
+	{.scene = NULL,
+	 .mesh = NULL,
+	 .material = NULL,
+	 .objPath = "./src/Etapa6/objetos/book.obj"},
+	{.scene = NULL,
+	 .mesh = NULL,
+	 .material = NULL,
+	 .objPath = "./src/Etapa6/objetos/rat.obj"},
+	{.scene = NULL,
+	 .mesh = NULL,
+	 .material = NULL,
+	 .objPath = "./src/Etapa6/objetos/candle.obj"}};
 const float scaleFactor = 0.05;
 
 void manage_lights()
@@ -88,33 +86,29 @@ void display()
 	glPushMatrix();
 	glRotatef(fAngulo, 0.0f, 1.0f, 0.0f);
 	glTranslatef(0.48f, 0.0f, 0.15f);
-	draw_object(&book);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0.0f, 0.5f, 0.0f);
-	glScalef(6.0f, 6.0f, 6.0f);
-	glRotatef(fAngulo, 0.0f, 1.0f, 0.0f);
-	draw_object(&statue);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0.0f, 0.0f, -2.0f);
-	glScalef(scaleFactor, scaleFactor, scaleFactor);
-	draw_object(&candle);
+	draw_object(&objects[0]);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(0.0f, 0.0f, 2.0f);
 	glScalef(scaleFactor * 0.25f, scaleFactor * 0.25f, scaleFactor * 0.25f);
 	glRotatef(fAngulo * 13, 0.0f, 1.0f, 0.0f);
-	draw_object(&rat);
+	draw_object(&objects[1]);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(-2.0f, 0.0f, 0.0f);
-	glScalef(scaleFactor, scaleFactor, scaleFactor);
-	draw_object(&lobster);
+	draw_object(&objects[2]);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-1.0f, 0.0f, 0.0f);
+	draw_object(&objects[2]);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(2.0f, 0.0f, 0.0f);
+	draw_object(&objects[2]);
 	glPopMatrix();
 
 	manage_lights();
@@ -128,7 +122,7 @@ void display()
 	glutSwapBuffers();
 }
 
-void init_lights()
+void initLights()
 {
 	// Enable lighting
 	glEnable(GL_LIGHTING);
@@ -281,7 +275,6 @@ void reshape(int width, int height)
 
 void initFog()
 {
-
 	glEnable(GL_DEPTH_TEST); // Enable depth testing
 	glEnable(GL_FOG);		 // Enable fog
 
@@ -289,6 +282,15 @@ void initFog()
 	glFogfv(GL_FOG_COLOR, (float[]){LIGHT_RAW, 1.0f}); // Set fog color
 	glFogf(GL_FOG_DENSITY, fogDensity);				   // Set fog density
 	glHint(GL_FOG_HINT, GL_NICEST);					   // Set fog hint
+}
+
+void initObjects()
+{
+	const int arr_len = sizeof(objects) / sizeof(objects[0]);
+	for (int i = 0; i < arr_len; i++)
+	{
+		load_object(&objects[i]);
+	}
 }
 
 int main(int argc, char **argv)
@@ -307,22 +309,9 @@ int main(int argc, char **argv)
 
 	initFog();
 
-	init_lights();
+	initLights();
 
-	init_object(&book);
-	load_object(&book, bookObj);
-
-	init_object(&candle);
-	load_object(&candle, candleObj);
-
-	init_object(&statue);
-	load_object(&statue, statueObj);
-
-	init_object(&rat);
-	load_object(&rat, ratObj);
-
-	init_object(&lobster);
-	load_object(&lobster, lobsterObj);
+	initObjects();
 
 	// Indicamos cuales son las funciones de redibujado e idle
 	glutDisplayFunc(display);
