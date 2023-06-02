@@ -7,13 +7,19 @@
 #define ON true
 #define OFF false
 
-const int W_WIDTH = 600;
-const int W_HEIGHT = 600;
+const int W_HEIGHT = 640;
+const int W_WIDTH = 940;
 const float ESCALADO_FIG = 1.5f;
 const float inc = 0.1f;
-bool displayPlane = false;
-bool displayAxis = true;
+const float scaleFactor = 0.05;
+
 float fogDensity = 0.02f;
+float fAngulo = 0.0f;
+float bAngulo = 0.0f;
+
+bool displayPlane = false;
+bool displayAxis = false;
+bool isFlat = true;
 
 Camera cam = {
 	.position = {0.0f, 1.6f, 3.8f},
@@ -23,9 +29,9 @@ Camera cam = {
 	.pitch = -0.4f};
 
 Light lights[] = {{0, ON, {BG_COLOR}, {PURE_WHITE}, {PURE_WHITE}, {0.0f, 2.0f, 0.0f, 0.0f}},
-				  {1, OFF, {BG_COLOR}, {RED}, {RED}, {2.0f, 0.0f, 0.0f, 0.0f}},
-				  {2, OFF, {BG_COLOR}, {BLUE}, {BLUE}, {0.0f, 2.0f, 0.0f, 0.0f}},
-				  {3, OFF, {BG_COLOR}, {GREEN}, {GREEN}, {-2.0f, 0.0f, 0.0f, 0.0f}}};
+				  {1, OFF, {BG_COLOR}, {RED}, {RED}, {-1.6f, 0.45f, 0.8f, 0.0f}},
+				  {2, OFF, {BG_COLOR}, {BLUE}, {BLUE}, {-0.7f, 0.45f, 1.4f, 0.0f}},
+				  {3, OFF, {BG_COLOR}, {GREEN}, {GREEN}, {1.2f, 0.45f, 1.6f, 0.0f}}};
 
 Object objects[] = {
 	{.scene = NULL,
@@ -41,13 +47,6 @@ Object objects[] = {
 	 .material = NULL,
 	 .objPath = "./src/Etapa6/objetos/candle.obj"}};
 
-float fAngulo = 0.0f;
-float rotationCoords[] = {0.0f, 1.0f, 0.0f};
-
-bool isFlat = false;
-
-const float scaleFactor = 0.05;
-
 void manage_lights()
 {
 	const int arr_len = sizeof(lights) / sizeof(lights[0]);
@@ -59,7 +58,7 @@ void manage_lights()
 			glDisable(GL_LIGHTING);
 			glPushMatrix();
 			glTranslatef(lights[i].position[0], lights[i].position[1], lights[i].position[2]);
-			drawSphere(0.1 * ESCALADO_FIG, 20, false, lights[i].specular);
+			drawSphere(0.04 * ESCALADO_FIG, 20, false, lights[i].specular);
 			glPopMatrix();
 			glEnable(GL_LIGHTING);
 		}
@@ -70,11 +69,17 @@ void manage_lights()
 	}
 }
 
+float mapBounce(float value, float outputMin, float outputMax)
+{
+	return (value + 1.0f) * 0.5f * (outputMax - outputMin) + outputMin;
+}
+
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	glMatrixMode(GL_MODELVIEW);
+	glShadeModel(isFlat ? GL_FLAT : GL_SMOOTH);
 	glLoadIdentity();
 
 	updateCamera(&cam);
@@ -85,44 +90,46 @@ void display()
 
 	glPushMatrix();
 	glRotatef(fAngulo, 0.0f, 1.0f, 0.0f);
-	glTranslatef(0.48f, 0.0f, 0.15f);
-	draw_object(&objects[0]);
+	glTranslatef(0.48f, mapBounce(sin(bAngulo), 0.2f, 0.8f), 0.15f);
+	draw_object(&objects[0], true, true);
 	glPopMatrix();
 
+	// 🐀 Town
 	glPushMatrix();
 	glTranslatef(0.0f, 0.0f, -5.0f);
 	glScalef(scaleFactor * 0.25f, scaleFactor * 0.25f, scaleFactor * 0.25f);
 	glRotatef(fAngulo * 13, 0.0f, 1.0f, 0.0f);
-	draw_object(&objects[1]);
+	draw_object(&objects[1], true, true);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(-3.0f, 0.0f, -5.0f);
 	glScalef(scaleFactor * 0.25f, scaleFactor * 0.25f, scaleFactor * 0.25f);
 	glRotatef(fAngulo * 13, 0.0f, 1.0f, 0.0f);
-	draw_object(&objects[1]);
+	draw_object(&objects[1], true, true);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(3.0f, 0.0f, -5.0f);
 	glScalef(scaleFactor * 0.25f, scaleFactor * 0.25f, scaleFactor * 0.25f);
 	glRotatef(fAngulo * 13, 0.0f, 1.0f, 0.0f);
-	draw_object(&objects[1]);
+	draw_object(&objects[1], true, true);
+	glPopMatrix();
+
+	// Candle Town
+	glPushMatrix();
+	glTranslatef(lights[1].position[0], 0.0f, lights[1].position[2]);
+	draw_object(&objects[2], true, true);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-2.0f, 0.0f, 0.0f);
-	draw_object(&objects[2]);
+	glTranslatef(lights[2].position[0], 0.0f, lights[2].position[2]);
+	draw_object(&objects[2], true, true);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-1.0f, 0.0f, 0.0f);
-	draw_object(&objects[2]);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(2.0f, 0.0f, 0.0f);
-	draw_object(&objects[2]);
+	glTranslatef(lights[3].position[0], 0.0f, lights[3].position[2]);
+	draw_object(&objects[2], true, true);
 	glPopMatrix();
 
 	manage_lights();
@@ -157,6 +164,12 @@ void idle()
 	// Si es mayor que dos pi la decrementamos
 	if (fAngulo > 360)
 		fAngulo -= 360;
+
+	// Incrementamos el ángulo
+	bAngulo += 0.005f;
+	// Si es mayor que dos pi la decrementamos
+	if (bAngulo > 360)
+		bAngulo -= 360;
 	// Indicamos que es necesario repintar la pantalla
 	glutPostRedisplay();
 }
@@ -333,7 +346,7 @@ int main(int argc, char **argv)
 	glutSpecialFunc(extraKeyBoardInput);
 	glutIdleFunc(idle);
 
-	glClearColor(PURE_BLACK);
+	glClearColor(BG_COLOR);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// Comienza la ejecución del core de GLUT

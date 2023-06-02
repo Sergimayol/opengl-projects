@@ -3,6 +3,7 @@
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <stdbool.h>
 
 typedef struct Object
 {
@@ -14,4 +15,4 @@ typedef struct Object
 
 void init_object(Object *object);
 void load_object(Object *object);
-void draw_object(Object *object);
+void draw_object(Object *object, bool getMaterial, bool getNormals);
