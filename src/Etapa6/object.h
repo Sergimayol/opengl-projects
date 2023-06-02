@@ -8,6 +8,7 @@ typedef struct Object
 {
 	const struct aiScene *scene;
 	struct aiMesh *mesh;
+	struct aiMaterial *material;
 } Object;
 
 void init_object(Object *object);
