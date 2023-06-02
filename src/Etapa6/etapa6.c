@@ -27,12 +27,6 @@ Light lights[] = {{0, ON, {BG_COLOR}, {PURE_WHITE}, {PURE_WHITE}, {0.0f, 2.0f, 0
 				  {2, OFF, {BG_COLOR}, {BLUE}, {BLUE}, {0.0f, 2.0f, 0.0f, 0.0f}},
 				  {3, OFF, {BG_COLOR}, {GREEN}, {GREEN}, {-2.0f, 0.0f, 0.0f, 0.0f}}};
 
-float fAngulo = 0.0f;
-float rotationCoords[] = {0.0f, 1.0f, 0.0f};
-float figColor[] = {0.251f, 0.51f, 0.427f, 0.0f};
-
-bool isFlat = false;
-
 Object objects[] = {
 	{.scene = NULL,
 	 .mesh = NULL,
@@ -46,6 +40,12 @@ Object objects[] = {
 	 .mesh = NULL,
 	 .material = NULL,
 	 .objPath = "./src/Etapa6/objetos/candle.obj"}};
+
+float fAngulo = 0.0f;
+float rotationCoords[] = {0.0f, 1.0f, 0.0f};
+
+bool isFlat = false;
+
 const float scaleFactor = 0.05;
 
 void manage_lights()
@@ -59,7 +59,7 @@ void manage_lights()
 			glDisable(GL_LIGHTING);
 			glPushMatrix();
 			glTranslatef(lights[i].position[0], lights[i].position[1], lights[i].position[2]);
-			drawSphere(0.1 * ESCALADO_FIG, 20, 20, rotationCoords, false, lights[i].specular);
+			drawSphere(0.1 * ESCALADO_FIG, 20, false, lights[i].specular);
 			glPopMatrix();
 			glEnable(GL_LIGHTING);
 		}
@@ -90,7 +90,21 @@ void display()
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0.0f, 0.0f, 2.0f);
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	glScalef(scaleFactor * 0.25f, scaleFactor * 0.25f, scaleFactor * 0.25f);
+	glRotatef(fAngulo * 13, 0.0f, 1.0f, 0.0f);
+	draw_object(&objects[1]);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-3.0f, 0.0f, -5.0f);
+	glScalef(scaleFactor * 0.25f, scaleFactor * 0.25f, scaleFactor * 0.25f);
+	glRotatef(fAngulo * 13, 0.0f, 1.0f, 0.0f);
+	draw_object(&objects[1]);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(3.0f, 0.0f, -5.0f);
 	glScalef(scaleFactor * 0.25f, scaleFactor * 0.25f, scaleFactor * 0.25f);
 	glRotatef(fAngulo * 13, 0.0f, 1.0f, 0.0f);
 	draw_object(&objects[1]);
@@ -223,7 +237,6 @@ void manageKeyBoardInput(unsigned char key, int x, int y)
 		break;
 	}
 
-	printCamera(&cam);
 	glutPostRedisplay();
 }
 
@@ -278,10 +291,10 @@ void initFog()
 	glEnable(GL_DEPTH_TEST); // Enable depth testing
 	glEnable(GL_FOG);		 // Enable fog
 
-	glFogi(GL_FOG_MODE, GL_EXP);					   // Set fog mode to exponential
-	glFogfv(GL_FOG_COLOR, (float[]){LIGHT_RAW, 1.0f}); // Set fog color
-	glFogf(GL_FOG_DENSITY, fogDensity);				   // Set fog density
-	glHint(GL_FOG_HINT, GL_NICEST);					   // Set fog hint
+	glFogi(GL_FOG_MODE, GL_EXP);					  // Set fog mode to exponential
+	glFogfv(GL_FOG_COLOR, (float[]){DARK_RAW, 1.0f}); // Set fog color
+	glFogf(GL_FOG_DENSITY, fogDensity);				  // Set fog density
+	glHint(GL_FOG_HINT, GL_NICEST);					  // Set fog hint
 }
 
 void initObjects()

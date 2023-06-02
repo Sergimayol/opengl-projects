@@ -12,5 +12,4 @@ void drawDonut(const GLdouble size, const int slices,
 			   bool displayWired, float figColor[4]);
 
 void drawSphere(const GLdouble size, const int slices,
-				float rotationAngle, float rotationCoords[],
 				bool displayWired, float figColor[4]);
