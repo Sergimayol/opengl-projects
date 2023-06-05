@@ -1,6 +1,8 @@
 #include "etapa6.h"
 #include "base.h"
+#include "map.h"
 #include "object.h"
+#include "texture.h"
 #include <GL/gl.h>
 #include <stdio.h>
 
@@ -15,11 +17,18 @@ const float scaleFactor = 0.05;
 
 float fogDensity = 0.02f;
 float fAngulo = 0.0f;
+float fAnguloPag1 = 0.0f;
+float fAnguloPag2 = 1.0f;
 float bAngulo = 0.0f;
 
 bool displayPlane = false;
 bool displayAxis = false;
 bool isFlat = true;
+
+Room room;
+TextureIdCounter textCounter;
+Texture roomText;
+Texture bookPageText;
 
 Camera cam = {
 	.position = {0.0f, 1.6f, 3.8f},
@@ -37,7 +46,7 @@ Object objects[] = {
 	{.scene = NULL,
 	 .mesh = NULL,
 	 .material = NULL,
-	 .objPath = "./src/Etapa6/objetos/book.obj"},
+	 .objPath = "./src/Etapa6/objetos/book/book.obj"},
 	{.scene = NULL,
 	 .mesh = NULL,
 	 .material = NULL,
@@ -74,6 +83,24 @@ float mapBounce(float value, float outputMin, float outputMax)
 	return (value + 1.0f) * 0.5f * (outputMax - outputMin) + outputMin;
 }
 
+void draw_page()
+{
+	glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, bookPageText.textureId);
+	glBegin(GL_QUADS);
+	glColor4f(PURE_WHITE);
+    glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(0.0f, 0.5f, 0.8f);
+    glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.0f, -0.5f, 0.8f);
+    glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.0f, -0.5f, -0.8f);
+    glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(0.0f, 0.5f, -0.8f);
+	glEnd();
+    glDisable(GL_TEXTURE_2D);
+}
+
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -86,14 +113,31 @@ void display()
 
 	glFogf(GL_FOG_DENSITY, fogDensity); // Set fog density
 
-	drawFloor(5);
+	glPushMatrix();
+	glTranslatef(0.0f, room.height / 2, 0.0f);
+	draw_room(&room);
+	glPopMatrix();
 
 	glPushMatrix();
 	glRotatef(fAngulo, 0.0f, 1.0f, 0.0f);
+	// Página 1
+	glPushMatrix();
+	glTranslatef(0.0f, mapBounce(sin(bAngulo), 0.2f, 0.8f) + 0.5f, 0.0f);
+	glRotatef(fAnguloPag1, 0.0f, 0.0f, 1.0f);
+	draw_page();
+	glPopMatrix();
+	// Página 2
+	glPushMatrix();
+	glTranslatef(0.0f, mapBounce(sin(bAngulo), 0.2f, 0.8f) + 0.5f, 0.0f);
+	glRotatef(fAnguloPag2, 0.0f, 0.0f, 1.0f);
+	draw_page();
+	glPopMatrix();
 	glTranslatef(0.48f, mapBounce(sin(bAngulo), 0.2f, 0.8f), 0.15f);
 	draw_object(&objects[0], true, true);
+
 	glPopMatrix();
 
+	glColor4f(YELLOW);
 	// 🐀 Town
 	glPushMatrix();
 	glTranslatef(0.0f, 0.0f, -5.0f);
@@ -116,6 +160,7 @@ void display()
 	draw_object(&objects[1], true, true);
 	glPopMatrix();
 
+	glColor4f(BLUE);
 	// Candle Town
 	glPushMatrix();
 	glTranslatef(lights[1].position[0], 0.0f, lights[1].position[2]);
@@ -132,13 +177,13 @@ void display()
 	draw_object(&objects[2], true, true);
 	glPopMatrix();
 
-	manage_lights();
+//	manage_lights();
 	glShadeModel(isFlat ? GL_FLAT : GL_SMOOTH);
 
-	glDisable(GL_LIGHTING);
+//	glDisable(GL_LIGHTING);
 	displayPlane ? drawPlanes(ESCALADO_FIG) : NULL;
 	displayAxis ? draw3DAXis(ESCALADO_FIG + 0.2f) : NULL;
-	glEnable(GL_LIGHTING);
+//	glEnable(GL_LIGHTING);
 
 	glutSwapBuffers();
 }
@@ -164,6 +209,14 @@ void idle()
 	// Si es mayor que dos pi la decrementamos
 	if (fAngulo > 360)
 		fAngulo -= 360;
+
+	fAnguloPag1 += 0.1f;
+	if (fAnguloPag1 > 360)
+		fAnguloPag1 -=360;
+
+	fAnguloPag2 += 0.5f;
+	if (fAnguloPag2 > 360)
+		fAnguloPag2 -=360;
 
 	// Incrementamos el ángulo
 	bAngulo += 0.005f;
@@ -295,7 +348,7 @@ void reshape(int width, int height)
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0, (double)width / (double)height, 1.0, 10.0);
+	gluPerspective(45.0, (double)width / (double)height, 1.0, 15.0);
 	glMatrixMode(GL_MODELVIEW);
 }
 
@@ -335,7 +388,15 @@ int main(int argc, char **argv)
 
 	initFog();
 
-	initLights();
+//	initLights();
+	init_texture_counter_id(&textCounter);
+
+	init_texture(&roomText, &textCounter);
+	load_texture(&roomText, "./src/Etapa6/objetos/wall/textures/wall1.jpg");
+	init_room(&room, &roomText);
+
+	init_texture(&bookPageText, &textCounter);
+	load_texture(&bookPageText, "./src/Etapa6/objetos/book/textures/page.jpg");
 
 	initObjects();
 

@@ -7,6 +7,7 @@ void init_object(Object *object)
 	object->scene = NULL;
 	object->mesh = NULL;
 	object->material = NULL;
+	object->textures = NULL;
 }
 
 void load_object(Object *object)

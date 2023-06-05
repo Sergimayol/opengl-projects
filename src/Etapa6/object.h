@@ -4,6 +4,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <stdbool.h>
+#include "texture.h"
 
 typedef struct Object
 {
@@ -11,6 +12,7 @@ typedef struct Object
 	struct aiMesh *mesh;
 	struct aiMaterial *material;
 	const char *objPath;
+	const Texture *textures;
 } Object;
 
 void init_object(Object *object);
