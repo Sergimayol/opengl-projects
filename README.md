@@ -10,15 +10,18 @@ Las practicas de la asignatura de informática gráfica consisten en la realizac
 
 ## Índice
 
-- [Proyectos OpenGL](#proyectos-opengl)
-  - [Índice](#índice)
-  - [Desarollo](#desarollo)
-  - [Estructura del repositorio](#estructura-del-repositorio)
-  - [Etapa 1: Generación del Workspace y primer programa en Opengl mediante GLUT](#etapa-1-generación-del-workspace-y-primer-programa-en-opengl-mediante-glut)
-  - [Etapa 2: Doble buffer y escalado](#etapa-2-doble-buffer-y-escalado)
-    - [Ejemplos de transformaciones](#ejemplos-de-transformaciones)
-    - [Doble pendulo](#doble-pendulo)
-  - [Etapa 3: Escena 3D](#etapa-3-escena-3d)
+-   [Proyectos OpenGL](#proyectos-opengl)
+    -   [Índice](#índice)
+    -   [Desarollo](#desarollo)
+    -   [Estructura del repositorio](#estructura-del-repositorio)
+    -   [Etapa 1: Generación del Workspace y primer programa en Opengl mediante GLUT](#etapa-1-generación-del-workspace-y-primer-programa-en-opengl-mediante-glut)
+    -   [Etapa 2: Doble buffer y escalado](#etapa-2-doble-buffer-y-escalado)
+        -   [Ejemplos de transformaciones](#ejemplos-de-transformaciones)
+        -   [Doble pendulo](#doble-pendulo)
+    -   [Etapa 3: Escena 3D](#etapa-3-escena-3d)
+    -   [Etapa 4: Movimiento de camara](#etapa-4-movimiento-de-camara)
+    -   [Etapa 5: Luces materiales y sombreados](#etapa-5-luces-materiales-y-sombreados)
+    -   [Etapa 6: Realismo I](#etapa-6-realismo-i)
 
 ## Desarollo
 
@@ -71,3 +74,7 @@ El repositorio está organizado de la siguiente manera:
 ## Etapa 5: Luces materiales y sombreados
 
 <p align="center"> <img width="30%" src=".github/img/Etapa5.png"> </p>
+
+## Etapa 6: Realismo I
+
+<!--<p align="center"> <img width="30%" src=".github/img/Etapa6.png"> </p>-->
