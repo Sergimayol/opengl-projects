@@ -4,6 +4,7 @@
 #include "object.h"
 #include "texture.h"
 #include <GL/gl.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 #define ON true
@@ -26,8 +27,8 @@ bool displayAxis = false;
 bool isFlat = true;
 
 Room room;
-TextureIdCounter textCounter;
 Texture roomText;
+
 Texture bookPageText;
 
 Camera cam = {
@@ -177,13 +178,13 @@ void display()
 	draw_object(&objects[2], true, true);
 	glPopMatrix();
 
-//	manage_lights();
+	manage_lights();
 	glShadeModel(isFlat ? GL_FLAT : GL_SMOOTH);
 
-//	glDisable(GL_LIGHTING);
+	glDisable(GL_LIGHTING);
 	displayPlane ? drawPlanes(ESCALADO_FIG) : NULL;
 	displayAxis ? draw3DAXis(ESCALADO_FIG + 0.2f) : NULL;
-//	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 
 	glutSwapBuffers();
 }
@@ -369,6 +370,7 @@ void initObjects()
 	for (int i = 0; i < arr_len; i++)
 	{
 		load_object(&objects[i]);
+		printf("[DEBUG]: Loading object %d\n", i);
 	}
 }
 
@@ -387,18 +389,25 @@ int main(int argc, char **argv)
 	glEnable(GL_LINE_SMOOTH | GL_DEPTH_TEST | GL_COLOR_MATERIAL);
 
 	initFog();
+	printf("[DEBUG]: Init fog done\n");
 
-//	initLights();
-	init_texture_counter_id(&textCounter);
+	initLights();
+	printf("[DEBUG]: Init lights done\n");
 
-	init_texture(&roomText, &textCounter);
+	init_texture(&roomText);
+	printf("[DEBUG]: Init room texture done\n");
 	load_texture(&roomText, "./src/Etapa6/objetos/wall/textures/wall1.jpg");
+	printf("[DEBUG]: Loading room texture done\n");
 	init_room(&room, &roomText);
+	printf("[DEBUG]: Init room done\n");
 
-	init_texture(&bookPageText, &textCounter);
+	init_texture(&bookPageText);
+	printf("[DEBUG]: Init book page texture done\n");
 	load_texture(&bookPageText, "./src/Etapa6/objetos/book/textures/page.jpg");
+	printf("[DEBUG]: Loading book page texture done\n");
 
 	initObjects();
+	printf("[DEBUG]: Init objects done\n");
 
 	// Indicamos cuales son las funciones de redibujado e idle
 	glutDisplayFunc(display);

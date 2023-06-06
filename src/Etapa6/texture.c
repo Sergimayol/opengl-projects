@@ -1,26 +1,29 @@
 #include "texture.h"
 #include <GL/gl.h>
+#include <stdio.h>
+#include <stdlib.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-void init_texture_counter_id(TextureIdCounter *counterId)
+void init_texture(Texture *texture)
 {
-	counterId->counterId = 0;
-}
-
-void init_texture(Texture *texture, TextureIdCounter *counterId)
-{
-	counterId->counterId += 1;
-	texture->textureId = counterId->counterId;
+	texture->textureId = 0;
 }
 
 void load_texture(Texture *texture, const char *textPath)
 {
 	int width, height, channels;
-	unsigned char* image = stbi_load(textPath, &width, &height, &channels, 0);
+	unsigned char* image = stbi_load(textPath, &width, &height, &channels, STBI_rgb);
+	if (!image)
+    {
+        printf("[ERROR]: Failed to load image %s\n", textPath);
+        return;
+    }
+	printf("[DEBUG]: Loading image %s with %d channels done\n", textPath, channels);
 
     // Generate and bind a texture object
-    glGenTextures(texture->textureId, &texture->textureId);
+    glGenTextures(1, &texture->textureId);
+	printf("[DEBUG]: Texture id(%d) assigned\n", texture->textureId);
     glBindTexture(GL_TEXTURE_2D, texture->textureId);
 
     // Set texture parameters
@@ -29,12 +32,20 @@ void load_texture(Texture *texture, const char *textPath)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	texture->image = image;
-
-    // Load the texture data
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	if (image)
+    {
+		texture->image = image;
+		printf("[DEBUG]: Saving image with size(%dx%d) to struct done\n", width, height);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+		printf("[DEBUG]: Loading texture to OpenGL done\n");
+    }
+    else
+    {
+        printf("[ERROR]: Failed to load image %s\n", textPath);
+    }
 
     // Free the image data
 	stbi_image_free(image);
+	printf("[DEBUG]: Free image data done\n");
 }
 

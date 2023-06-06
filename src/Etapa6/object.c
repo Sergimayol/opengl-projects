@@ -18,8 +18,11 @@ void load_object(Object *object)
 		printf("Error loading model: %s\n", aiGetErrorString());
 		exit(1);
 	}
+	printf("[DEBUG]: Loading model %s done\n", object->objPath);
 	object->mesh = object->scene->mMeshes[0];									// Assuming there is only one mesh in the scene
+	printf("[DEBUG]: Loding mesh done\n");
 	object->material = object->scene->mMaterials[object->mesh->mMaterialIndex]; // Assign material
+	printf("[DEBUG]: Material assignment done\n");
 }
 
 void draw_object(Object *object, bool getMaterial, bool getNormals)
