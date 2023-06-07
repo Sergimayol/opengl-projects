@@ -25,6 +25,8 @@ float bAngulo = 0.0f;
 bool displayPlane = false;
 bool displayAxis = false;
 bool isFlat = true;
+bool pageRotation = true;
+bool bookRotation = true;
 
 Room room;
 Texture roomText;
@@ -205,25 +207,32 @@ void initLights()
 
 void idle()
 {
-	// Incrementamos el ángulo
-	fAngulo += 0.1f;
-	// Si es mayor que dos pi la decrementamos
-	if (fAngulo > 360)
-		fAngulo -= 360;
+	if (bookRotation)
+	{
+		// Incrementamos el ángulo
+		fAngulo += 0.1f;
+		// Si es mayor que dos pi la decrementamos
+		if (fAngulo > 360)
+			fAngulo -= 360;
 
-	fAnguloPag1 += 0.1f;
-	if (fAnguloPag1 > 360)
-		fAnguloPag1 -=360;
+		// Incrementamos el ángulo
+		bAngulo += 0.005f;
+		// Si es mayor que dos pi la decrementamos
+		if (bAngulo > 360)
+			bAngulo -= 360;
+	}
 
-	fAnguloPag2 += 0.5f;
-	if (fAnguloPag2 > 360)
-		fAnguloPag2 -=360;
+	if (pageRotation)
+	{
+		fAnguloPag1 += 0.1f;
+		if (fAnguloPag1 > 360)
+			fAnguloPag1 -=360;
 
-	// Incrementamos el ángulo
-	bAngulo += 0.005f;
-	// Si es mayor que dos pi la decrementamos
-	if (bAngulo > 360)
-		bAngulo -= 360;
+		fAnguloPag2 += 0.5f;
+		if (fAnguloPag2 > 360)
+			fAnguloPag2 -=360;
+	}
+
 	// Indicamos que es necesario repintar la pantalla
 	glutPostRedisplay();
 }
@@ -344,6 +353,23 @@ void extraKeyBoardInput(int key, int x, int y)
 	}
 }
 
+void manageMouseEvents(int button, int state, int x, int y) {
+	x = x;
+	y = y;
+
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{	// Left mouse button pressed
+		// Change page rotation state
+		pageRotation = !pageRotation;
+    }
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+	{	// Right mouse button pressed
+		// Change book rotation state
+		bookRotation = !bookRotation;
+    }
+	glutPostRedisplay();
+}
+
 void reshape(int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -414,6 +440,7 @@ int main(int argc, char **argv)
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(manageKeyBoardInput);
 	glutSpecialFunc(extraKeyBoardInput);
+	glutMouseFunc(manageMouseEvents);
 	glutIdleFunc(idle);
 
 	glClearColor(BG_COLOR);
