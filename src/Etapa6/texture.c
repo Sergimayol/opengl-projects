@@ -39,10 +39,10 @@ void load_texture(Texture *texture, const char *textPath)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 		printf("[DEBUG]: Loading texture to OpenGL done\n");
     }
-    else
-    {
+	else
+	{
         printf("[ERROR]: Failed to load image %s\n", textPath);
-    }
+	}
 
     // Free the image data
 	stbi_image_free(image);
