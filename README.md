@@ -46,35 +46,35 @@ El repositorio está organizado de la siguiente manera:
     .
     .
     .
-    └── EtapaX
+    └── Etapa6
 ```
 
 ## Etapa 1: Generación del Workspace y primer programa en Opengl mediante GLUT
 
-<p align="center"> <img width="30%" src=".github/img/Etapa1.PNG"> </p>
+<p align="center"> <img width="30%" src="./docs/img/Etapa1.PNG"> </p>
 
 ## Etapa 2: Doble buffer y escalado
 
 ### Ejemplos de transformaciones
 
-<p align="center"> <img width="30%" src=".github/img/Etapa2_1.PNG"> </p>
+<p align="center"> <img width="30%" src="./docs/img/Etapa2_1.PNG"> </p>
 
 ### Doble pendulo
 
-<p align="center"> <img width="30%" src=".github/img/pendulo-doble.png"> </p>
+<p align="center"> <img width="30%" src="./docs/img/pendulo-doble.png"> </p>
 
 ## Etapa 3: Escena 3D
 
-<p align="center"> <img width="30%" src=".github/img/Etapa3.png"> </p>
+<p align="center"> <img width="30%" src="./docs/img/Etapa3.png"> </p>
 
 ## Etapa 4: Movimiento de camara
 
-<p align="center"> <img width="30%" src=".github/img/Etapa4.png"> </p>
+<p align="center"> <img width="30%" src="./docs/img/Etapa4.png"> </p>
 
 ## Etapa 5: Luces materiales y sombreados
 
-<p align="center"> <img width="30%" src=".github/img/Etapa5.png"> </p>
+<p align="center"> <img width="30%" src="./docs/img/Etapa5.png"> </p>
 
 ## Etapa 6: Realismo I
 
-<!--<p align="center"> <img width="30%" src=".github/img/Etapa6.png"> </p>-->
+<!--<p align="center"> <img width="30%" src="./docs/img/Etapa6.png"> </p>-->
