@@ -10,6 +10,8 @@
 #define ON true
 #define OFF false
 #define DEG_TO_RAD(deg) ((deg) * (3.1415926535 / 180.0))
+#define MAP_BOUNCE(value, outputMin, outputMax) (value + 1.0f) * 0.5f * (outputMax - outputMin) + outputMin
+#define RANDOM_BOOL() ((rand() % 2) == 0)
 
 const int W_HEIGHT = 640;
 const int W_WIDTH = 940;
@@ -28,6 +30,7 @@ bool displayAxis = false;
 bool isFlat = true;
 bool pageRotation = true;
 bool bookRotation = true;
+bool page_going_right = true;
 
 Room room;
 Texture roomText;
@@ -82,11 +85,6 @@ void manage_lights()
 	}
 }
 
-float mapBounce(float value, float outputMin, float outputMax)
-{
-	return (value + 1.0f) * 0.5f * (outputMax - outputMin) + outputMin;
-}
-
 void draw_page()
 {
 	glEnable(GL_TEXTURE_2D);
@@ -127,13 +125,13 @@ void display()
 
 	// Página 1
 	glPushMatrix();
-	glTranslatef(0.0f, mapBounce(sin(DEG_TO_RAD(bAngulo)), 0.2f, 0.8f) + 0.5f, 0.0f);
-	glTranslatef(cos(DEG_TO_RAD(fAnguloPag1)), sin(DEG_TO_RAD(fAnguloPag1)), 0.0f);
-	glRotatef(fAnguloPag1, 0.0f, 0.0f, 1.0f);
+	glTranslatef(0.0f, MAP_BOUNCE(sin(DEG_TO_RAD(bAngulo)), 0.2f, 0.8f), 0.02f);
+	glTranslatef(cos(DEG_TO_RAD(fAnguloPag1)) / 2, sin(DEG_TO_RAD(fAnguloPag1)) / 2, 0.0f);
+	glRotatef(fAnguloPag1 + 90, 0.0f, 0.0f, 1.0f);
 	draw_page();
 	glPopMatrix();
 
-	glTranslatef(0.48f, mapBounce(sin(DEG_TO_RAD(bAngulo)), 0.2f, 0.8f), 0.15f);
+	glTranslatef(0.48f, MAP_BOUNCE(sin(DEG_TO_RAD(bAngulo)), 0.2f, 0.8f), 0.15f);
 	draw_object(&objects[0], true, true);
 
 	glPopMatrix();
@@ -206,27 +204,36 @@ void idle()
 	if (bookRotation)
 	{
 		// Incrementamos el ángulo
-		fAngulo += 0.1f;
-		// Si es mayor que dos pi la decrementamos
-		if (fAngulo > 360)
-			fAngulo -= 360;
+		fAngulo = fmod(fAngulo + 0.1f, 360);
 
 		// Incrementamos el ángulo
-		bAngulo += 0.005f;
-		// Si es mayor que dos pi la decrementamos
-		if (bAngulo > 360)
-			bAngulo -= 360;
+		bAngulo = fmod(bAngulo + 0.005f, 360);
 	}
 
 	if (pageRotation)
 	{
-		fAnguloPag1 += 0.2f;
-		if (fAnguloPag1 > 360)
-			fAnguloPag1 -= 360;
-
-		fAnguloPag2 += 0.5f;
-		if (fAnguloPag2 > 360)
-			fAnguloPag2 -= 360;
+		if (page_going_right)
+		{
+			fAnguloPag1 += 0.2f;
+			if (fAnguloPag1 > 180)
+			{
+				page_going_right = RANDOM_BOOL();
+				if (page_going_right)
+				{
+					fAnguloPag1 -= 180;
+				}
+			}
+		}
+		else
+		{
+			fAnguloPag1 -= 0.2f;
+			if (fAnguloPag1 < 0)
+			{
+				page_going_right = RANDOM_BOOL();
+				if (!page_going_right)
+					fAnguloPag1 = 180;
+			}
+		}
 	}
 
 	// Indicamos que es necesario repintar la pantalla
