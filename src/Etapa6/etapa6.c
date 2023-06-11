@@ -9,6 +9,7 @@
 
 #define ON true
 #define OFF false
+#define DEG_TO_RAD(deg) ((deg) * (3.1415926535 / 180.0))
 
 const int W_HEIGHT = 640;
 const int W_WIDTH = 940;
@@ -16,7 +17,7 @@ const float ESCALADO_FIG = 1.5f;
 const float inc = 0.1f;
 const float scaleFactor = 0.05;
 
-float fogDensity = 0.02f;
+float fogDensity = 0.3f;
 float fAngulo = 0.0f;
 float fAnguloPag1 = 0.0f;
 float fAnguloPag2 = 1.0f;
@@ -89,19 +90,19 @@ float mapBounce(float value, float outputMin, float outputMax)
 void draw_page()
 {
 	glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, bookPageText.textureId);
+	glBindTexture(GL_TEXTURE_2D, bookPageText.textureId);
 	glBegin(GL_QUADS);
 	glColor4f(PURE_WHITE);
-    glTexCoord2f(0.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(0.0f, 0.5f, 0.8f);
-    glTexCoord2f(1.0f, 0.0f);
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(0.0f, -0.5f, 0.8f);
-    glTexCoord2f(1.0f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(0.0f, -0.5f, -0.8f);
-    glTexCoord2f(0.0f, 1.0f);
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(0.0f, 0.5f, -0.8f);
 	glEnd();
-    glDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_2D);
 }
 
 void display()
@@ -123,24 +124,20 @@ void display()
 
 	glPushMatrix();
 	glRotatef(fAngulo, 0.0f, 1.0f, 0.0f);
+
 	// Página 1
 	glPushMatrix();
-	glTranslatef(0.0f, mapBounce(sin(bAngulo), 0.2f, 0.8f) + 0.5f, 0.0f);
+	glTranslatef(0.0f, mapBounce(sin(DEG_TO_RAD(bAngulo)), 0.2f, 0.8f) + 0.5f, 0.0f);
+	glTranslatef(cos(DEG_TO_RAD(fAnguloPag1)), sin(DEG_TO_RAD(fAnguloPag1)), 0.0f);
 	glRotatef(fAnguloPag1, 0.0f, 0.0f, 1.0f);
 	draw_page();
 	glPopMatrix();
-	// Página 2
-	glPushMatrix();
-	glTranslatef(0.0f, mapBounce(sin(bAngulo), 0.2f, 0.8f) + 0.5f, 0.0f);
-	glRotatef(fAnguloPag2, 0.0f, 0.0f, 1.0f);
-	draw_page();
-	glPopMatrix();
-	glTranslatef(0.48f, mapBounce(sin(bAngulo), 0.2f, 0.8f), 0.15f);
+
+	glTranslatef(0.48f, mapBounce(sin(DEG_TO_RAD(bAngulo)), 0.2f, 0.8f), 0.15f);
 	draw_object(&objects[0], true, true);
 
 	glPopMatrix();
 
-	glColor4f(YELLOW);
 	// 🐀 Town
 	glPushMatrix();
 	glTranslatef(0.0f, 0.0f, -5.0f);
@@ -163,7 +160,6 @@ void display()
 	draw_object(&objects[1], true, true);
 	glPopMatrix();
 
-	glColor4f(BLUE);
 	// Candle Town
 	glPushMatrix();
 	glTranslatef(lights[1].position[0], 0.0f, lights[1].position[2]);
@@ -224,13 +220,13 @@ void idle()
 
 	if (pageRotation)
 	{
-		fAnguloPag1 += 0.1f;
+		fAnguloPag1 += 0.2f;
 		if (fAnguloPag1 > 360)
-			fAnguloPag1 -=360;
+			fAnguloPag1 -= 360;
 
 		fAnguloPag2 += 0.5f;
 		if (fAnguloPag2 > 360)
-			fAnguloPag2 -=360;
+			fAnguloPag2 -= 360;
 	}
 
 	// Indicamos que es necesario repintar la pantalla
@@ -305,9 +301,11 @@ void manageKeyBoardInput(unsigned char key, int x, int y)
 		break;
 	case 'x':
 		fogDensity += 0.01f;
+		printf("fog density: %f\n", fogDensity);
 		break;
 	case 'z':
 		fogDensity -= 0.01f;
+		printf("fog density: %f\n", fogDensity);
 		break;
 	default:
 		break;
@@ -353,20 +351,21 @@ void extraKeyBoardInput(int key, int x, int y)
 	}
 }
 
-void manageMouseEvents(int button, int state, int x, int y) {
+void manageMouseEvents(int button, int state, int x, int y)
+{
 	x = x;
 	y = y;
 
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-	{	// Left mouse button pressed
+	{ // Left mouse button pressed
 		// Change page rotation state
 		pageRotation = !pageRotation;
-    }
+	}
 	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
-	{	// Right mouse button pressed
+	{ // Right mouse button pressed
 		// Change book rotation state
 		bookRotation = !bookRotation;
-    }
+	}
 	glutPostRedisplay();
 }
 
