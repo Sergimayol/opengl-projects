@@ -77,4 +77,5 @@ El repositorio está organizado de la siguiente manera:
 
 ## Etapa 6: Realismo I
 
-<!--<p align="center"> <img width="30%" src="./docs/img/Etapa6.png"> </p>-->
+<img src="./docs/img/etapa6-1.png" width="400"> <img src="./docs/img/etapa6-2.png" width="400" align='right'>
+<img src="./docs/img/etapa6-3.png" width="400"> <img src="./docs/img/etapa6-4.png" width="400" align='right'>
