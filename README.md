@@ -28,10 +28,10 @@ Las practicas de la asignatura de informática gráfica consisten en la realizac
 Para compilar los programas se emplea `nobuild.c`. Para ello, primero se debe de compilar este programa y después ejecutarlo:
 
 ```bash
-# Si no se tiene compilado nobuild compilarlo
+# Si no se tiene compilado nobuild, ejecutar:
 gcc -o nobuild nobuild.c
 
-# Para ejecutar y compilar programas
+# Para compilar programas
 ./nobuild
 ```
 
