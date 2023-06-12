@@ -1,4 +1,4 @@
-#include "../templates/base.h"
+#include "base.h"
 
 const int W_WIDTH = 600; // Tamaño incial de la ventana
 const int W_HEIGHT = 600;
