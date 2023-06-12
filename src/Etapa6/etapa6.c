@@ -31,6 +31,7 @@ bool isFlat = true;
 bool pageRotation = true;
 bool bookRotation = true;
 bool page_going_right = true;
+bool lightsOn = true;
 
 Room room;
 Texture roomText;
@@ -174,13 +175,21 @@ void display()
 	draw_object(&objects[2], true, true);
 	glPopMatrix();
 
-	manage_lights();
+	if (lightsOn)
+	{
+		manage_lights();
+	}
+
 	glShadeModel(isFlat ? GL_FLAT : GL_SMOOTH);
 
 	glDisable(GL_LIGHTING);
 	displayPlane ? drawPlanes(ESCALADO_FIG) : NULL;
 	displayAxis ? draw3DAXis(ESCALADO_FIG + 0.2f) : NULL;
-	glEnable(GL_LIGHTING);
+
+	if (lightsOn)
+	{
+		glEnable(GL_LIGHTING);
+	}
 
 	glutSwapBuffers();
 }
@@ -313,6 +322,9 @@ void manageKeyBoardInput(unsigned char key, int x, int y)
 	case 'z':
 		fogDensity -= 0.01f;
 		printf("fog density: %f\n", fogDensity);
+		break;
+	case 'b':
+		lightsOn = !lightsOn;
 		break;
 	default:
 		break;
